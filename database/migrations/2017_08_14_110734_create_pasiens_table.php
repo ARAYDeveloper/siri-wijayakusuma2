@@ -15,7 +15,7 @@ class CreatePasiensTable extends Migration
     {
         Schema::create('pasiens', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('nik',13)->unique()->nullable();
+            $table->char('nik',16)->unique()->nullable();
             $table->string('nama');
             $table->date('tgl_lahir', 30);
             $table->text('alamat');
