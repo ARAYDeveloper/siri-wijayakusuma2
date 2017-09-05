@@ -22,6 +22,7 @@ Route::resource('kamar','kamarController');
 Route::resource('petugas','petugasController');
 Route::resource('diagnosis','diagnosisController');
 Route::resource('riwayat','riwayatController');
+Route::resource('spesialis','spesialisController');
 
 Route::get('/getLayanan', 'kamarController@getLayanan');
 

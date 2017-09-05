@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/datepicker3.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-table.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/styles.css')}}">
-    <link href="{{asset('plugins/select2/select2.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('plugins/select2/select2.min.css')}}" rel="stylesheet" type="text/css"/>
 
     <!--Icons-->
     <script src="{{asset('js/lumino.glyphs.js')}}"></script>
@@ -31,7 +31,8 @@
 <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -45,9 +46,11 @@
                 <li><a href="/adm_dash">Dashboard</a></li>
                 <li><a href="/riwayat"><span class="glyphicon glyphicon-user"></span> Pasien</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list-alt"></span> Laporan <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                                class="glyphicon glyphicon-list-alt"></span> Laporan <span class="caret"></span></a>
                     <ul class="dropdown-menu animated flipInX" role="menu">
-                        <li><a href="/adm_lap_in"><span class="glyphicon glyphicon-th-list"></span> Laporan Internal</a></li>
+                        <li><a href="/adm_lap_in"><span class="glyphicon glyphicon-th-list"></span> Laporan Internal</a>
+                        </li>
                         <li class="divider"></li>
                         <li>
                             <a href="/adm_lap_ex_rl12">
@@ -77,19 +80,23 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Transaksi <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                                class="glyphicon glyphicon-book"></span> Transaksi <span class="caret"></span></a>
                     <ul class="dropdown-menu animated flipInX" role="menu">
-                        <li><a href="/adm_t_pas_masuk"><span class="glyphicon glyphicon-circle-arrow-right"></span>   Pasien Masuk</a></li>
-                        <li><a href="/adm_t_pas_keluar"><span class="glyphicon glyphicon-circle-arrow-left"></span>   Pasien Keluar</a></li>
+                        <li><a href="/adm_t_pas_masuk"><span class="glyphicon glyphicon-circle-arrow-right"></span>
+                                Pasien Masuk</a></li>
+                        <li><a href="/adm_t_pas_keluar"><span class="glyphicon glyphicon-circle-arrow-left"></span>
+                                Pasien Keluar</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> Data Master <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                                class="glyphicon glyphicon-wrench"></span> Data Master <span class="caret"></span></a>
                     <ul class="dropdown-menu animated flipInX" role="menu">
                         <li>
-                        <a class="" href="/layanan">
-                            <span class="glyphicon glyphicon-folder-open"></span> Jenis Pelayanan
-                        </a>
+                            <a class="" href="/layanan">
+                                <span class="glyphicon glyphicon-folder-open"></span> Jenis Pelayanan
+                            </a>
                         </li>
                         <li>
                             <a class="" href="/bayar">
@@ -116,16 +123,22 @@
                                 <span class="glyphicon glyphicon-folder-open"></span> Data Diagnosis
                             </a>
                         </li>
+                        <li>
+                            <a class="" href="/spesialis">
+                                <span class="glyphicon glyphicon-folder-open"></span> Data Spesialis
+                            </a>
+                        </li>
                         </li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span><b> User</b> <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                                class="glyphicon glyphicon-user"></span><b> User</b> <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span></span>   Profile</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-cog"></span>   Settings</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-remove-circle"></span> Logout</a></li>
                     </ul>
                 </li>
