@@ -44,7 +44,7 @@ class riwayatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

@@ -3,7 +3,7 @@
 @section('head-css')
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-datetimepicker.min.css')}}">
     <style>
-        thead.bg-ocean-blue, tr.bg-ocean-blue, td.bg-ocean-blue{
+        thead.bg-ocean-blue, tr.bg-ocean-blue, td.bg-ocean-blue {
             background-color: #6db8db;
         }
     </style>
@@ -38,10 +38,10 @@
                                                 <option value="">-- PILIH PASIEN --</option>
                                                 @foreach($data as $datapasien)
                                                     @if($datapasien->status_rawat == 'tidak')
-                                                    <option value="{{$datapasien->id}}">{{$datapasien->nama}} &nbsp;&nbsp;#nik={{$datapasien->nik}}
-                                                        &nbsp;#alamat={{$datapasien->alamat}}
-                                                        &nbsp;#no_rm={{$datapasien->no_rm}}
-                                                    </option>
+                                                        <option value="{{$datapasien->id}}">{{$datapasien->nama}} &nbsp;&nbsp;#nik={{$datapasien->nik}}
+                                                            &nbsp;#alamat={{$datapasien->alamat}}
+                                                            &nbsp;#no_rm={{$datapasien->no_rm}}
+                                                        </option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -80,7 +80,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Diagnosa</label>
                                         <div class="col-sm-10">
-                                            <select name="id_diagnosis" class="form-control ">
+                                            <select name="id_diagnosis" class="form-control select2">
+                                                <option value="">-- PILIH DIAGNOSA --</option>
                                                 @foreach($diagnosis as $datadiagnosa)
                                                     <option value="{{$datadiagnosa->id_diagnosis}}">{{$datadiagnosa->nama_penyakit}}
                                                         &nbsp;#kode_dtd={{$datadiagnosa->kode_dtd}}
@@ -92,26 +93,30 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Tanggal Masuk</label>
                                         <div class="col-sm-10">
-                                            <input name="tgl_masuk" type="text" class="form-control form_datetime" placeholder="" data-date-format='yyyy-mm-dd'>
+                                            <input id="tgl_masuk" name="tgl_masuk" type="text"
+                                                   class="form-control form_datetime"
+                                                   placeholder="" data-date-format='yyyy-mm-dd'>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Tanggal Lapor</label>
                                         <div class="col-sm-10">
-                                            <input name="tgl_lapor" type="text" class="form-control form_datetime" placeholder="" data-date-format='yyyy-mm-dd'>
+                                            <input id="tgl_lapor" type="text" class="form-control form_datetime"
+                                                   placeholder="" data-date-format='yyyy-mm-dd'>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Tanggal Keluar</label>
                                         <div class="col-sm-10">
-                                            <input name="tgl_keluar" type="text" class="form-control form_datetime" placeholder="" data-date-format='yyyy-mm-dd'>
+                                            <input id="tgl_keluar" type="text" class="form-control form_datetime"
+                                                   placeholder="" data-date-format='yyyy-mm-dd'>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Pindah Dari</label>
                                         <div class=" col-sm-10">
 
-                                            <select name="pindah_dari" class="form-control ">
+                                            <select id="pindah_dari" class="form-control select2">
                                                 <option value="">-- TIDAK --</option>
                                                 @foreach($kamar as $databangsal)
                                                     <option value="{{$databangsal->id}}">
@@ -125,7 +130,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Pindah Ke</label>
                                         <div class="col-sm-10">
-                                            <select name="pindah_ke" class="form-control ">
+                                            <select id="pindah_ke" class="form-control select2">
                                                 <option value="">-- TIDAK --</option>
                                                 @foreach($kamar as $databangsal)
                                                     <option value="{{$databangsal->id}}">
@@ -139,7 +144,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Status Keluar</label>
                                         <div class=" col-sm-10">
-                                            <select name="status_keluar" class="form-control ">
+                                            <select id="status_keluar" class="form-control ">
                                                 <option value="Hidup">Hidup</option>
                                                 <option value="Dirujuk">Dirujuk</option>
                                                 <option value="Meninggal">Meninggal</option>
@@ -149,7 +154,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Pulang Paksa</label>
                                         <div class="col-sm-10">
-                                            <select name="pulang_paksa" class="form-control ">
+                                            <select id="pulang_paksa" class="form-control ">
                                                 <option value="Ya">Ya</option>
                                                 <option value="Tidak">Tidak</option>
                                             </select>
@@ -158,7 +163,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Rujuk Ke</label>
                                         <div class=" col-sm-10">
-                                            <select name="id_rumah_sakit_rujuks" class="form-control select2" width="100%" style="width: 100%">
+                                            <select id="id_rumah_sakit_rujuks" class="form-control select2"
+                                                    width="100%" style="width: 100%">
                                                 <option value="null">-- PILIH --</option>
                                                 @foreach($datars as $rs)
                                                     <option value="{{$rs->id}}">{{$rs->nama_rs}}</option>
@@ -167,6 +173,9 @@
                                         </div>
                                     </div>
                                 </div><!-- /.box-body -->
+                                <div class="box-footer">
+                                    <button id="simpan" class="btn btn-default pull-right">Simpan</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -181,7 +190,7 @@
                             <!-- form start -->
                             <form class="form-horizontal">
                                 <div class="box-body">
-                                    <table class="table table-bordered table-hover">
+                                    <table id="tableRiwayat" class="table table-bordered table-hover">
                                         <thead class="bg-ocean-blue">
                                         <tr>
                                             <th>Tanggal Masuk</th>
@@ -191,12 +200,6 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>2017-01-01</td>
-                                            <td>maag</td>
-                                            <td>Mawar</td>
-                                            <td>Hidup</td>
-                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -216,36 +219,32 @@
                                 <ol class="breadcrumb">
                                     <li>
                                         <select class="form-control select2" style="width: 100%;">
-                                            <option selected="selected">Pilih Bangsal</option>
-                                            <option>Bangsal 1</option>
-                                            <option>Bangsal 2</option>
+                                            <option value="">-- Semua --</option>
+                                            @foreach($kamar as $item)
+                                                <option value="{{$item->id}}">{{$item->nama_kamar}}</option>
+                                            @endforeach
                                         </select>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn btn-primary">Tampil</button>
+                                        <button id="tampil" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
                                 </ol>
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <table id="example2" data-toggle="table" data-search="true" data-select-item-name="toolbar1"
+                            <table id="table_pasien" data-toggle="table" data-search="true"
+                                   data-select-item-name="toolbar1"
                                    data-pagination="true" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-sortable="true">No. RM</th>
-                                    <th data-field="text">Pasien Awal</th>
-                                    <th data-field="text" data-sortable="true">Nama</th>
-                                    <th data-field="text" data-sortable="true">Tgl. Lahir</th>
+                                    <th data-field="text">Nama Pasien</th>
+                                    <th data-field="text">Diagnosa</th>
                                     <th data-field="text" data-sortable="true">Tgl. Masuk</th>
+                                    <th data-field="text" data-sortable="true">Tgl. Keluar</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                </tr>
                                 </tbody>
                             </table>
                         </div><!-- /.box-body -->
@@ -267,5 +266,11 @@
             $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});
             $('.select2').select2();
         });
+
+        $('#simpan').click(function () {
+            if ($('#id_pasien').val() != '' && $('#id_kamar').val() != '' && $('#id_diagnosis').val() != '' && $('#tgl_masuk').val() != '') {
+
+            }
+        })
     </script>
 @endpush

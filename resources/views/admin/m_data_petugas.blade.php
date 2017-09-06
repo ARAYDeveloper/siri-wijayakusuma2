@@ -65,7 +65,7 @@
                                                                 <label class="col-sm-3 control-label">Tanggal
                                                                     Lahir</label>
                                                                 <div class="col-sm-7">
-                                                                    <input name="tgl_lahir" id="tgl_lahir" type="date"
+                                                                    <input name="tgl_lahir" id="tgl_lahir" type="text"
                                                                            class="form-control"
                                                                            data-date-format='yyyy-mm-dd'>
                                                                 </div>
