@@ -14,10 +14,13 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $table='users';
+    protected $primaryKey='id';
     protected $fillable = [
-        'name', 'email', 'password',
+        'id_level','id_petugas','name', 'email', 'password',
     ];
 
+    public $timestamps=true;
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -26,4 +29,22 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function pegawai()
+    {
+        return $this->belongsTo(petugas::class,'id_petugas','id');
+    }
+
+    public function keuserlevel(){
+        return $this->belongsTo(Level::class,'id_level','id');
+    }
+
+    public function punyaRule($namaRule){
+
+        if ($this->keuserlevel->level == $namaRule){
+            return true;
+        }
+
+        return false;
+    }
 }

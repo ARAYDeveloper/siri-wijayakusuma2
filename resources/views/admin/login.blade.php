@@ -26,20 +26,17 @@
 			<div class="login-panel panel panel-default">
 				<div class="panel-heading">Log IN</div>
 				<div class="panel-body">
-					<form role="form">
+					<form role="form" action="{{ route('login.post') }}" method="POST">
+						{{csrf_field()}}
+
 						<fieldset>
 							<div class="form-group">
-								<input class="form-control" placeholder="Username" name="username" type="email" autofocus="">
+								<input class="form-control" placeholder="Email" name="email" type="email" autofocus="">
 							</div>
 							<div class="form-group">
 								<input class="form-control" placeholder="Password" name="password" type="password" value="">
 							</div>
-							<div class="checkbox">
-								<label>
-									<input name="remember" type="checkbox" value="Remember Me">Remember Me
-								</label>
-							</div>
-							<a href="index.html" class="btn btn-primary">Login</a>
+							<button class="btn btn-primary">LOGIN</button>
 						</fieldset>
 					</form>
 				</div>

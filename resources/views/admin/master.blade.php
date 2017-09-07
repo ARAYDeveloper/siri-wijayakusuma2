@@ -44,7 +44,11 @@
         <div class="collapse navbar-collapse animated fadeIn" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav animated fadeIn text16">
                 <li><a href="/adm_dash">Dashboard</a></li>
+
+                @if(Auth::user()->keuserlevel->level == 'petugas')
                 <li><a href="/riwayat"><span class="glyphicon glyphicon-user"></span> Pasien</a></li>
+                @endif
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
                                 class="glyphicon glyphicon-list-alt"></span> Laporan <span class="caret"></span></a>
@@ -79,6 +83,8 @@
                         </li>
                     </ul>
                 </li>
+
+                @if(Auth::user()->keuserlevel->level == 'petugas')
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
                                 class="glyphicon glyphicon-book"></span> Transaksi <span class="caret"></span></a>
@@ -89,7 +95,10 @@
                                 Pasien Keluar</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
+                @endif
+
+                @if(Auth::user()->keuserlevel->level == 'petugas')
+                    <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
                                 class="glyphicon glyphicon-wrench"></span> Data Master <span class="caret"></span></a>
                     <ul class="dropdown-menu animated flipInX" role="menu">
@@ -131,6 +140,7 @@
                         </li>
                     </ul>
                 </li>
+                @endif
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
@@ -139,7 +149,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span></span>   Profile</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-remove-circle"></span> Logout</a></li>
+                        <li><a href="{{ route('logout.index') }}"><span class="glyphicon glyphicon-remove-circle"></span> Logout</a></li>
                     </ul>
                 </li>
             </ul>

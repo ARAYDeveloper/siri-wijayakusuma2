@@ -1,1 +1,0 @@
-@include('admin.header_sidebar')
