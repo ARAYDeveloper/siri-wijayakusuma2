@@ -8,7 +8,7 @@ class kamar extends Model
 {
     protected $table = "kamars";
     protected $primaryKey = "id";
-    protected $fillable = ['id','nama_kamar', 'jumlah', 'id_pelayanan'];
+    protected $fillable = ['id','nama_kamar', 'sisa_pakai', 'jumlah', 'id_pelayanan'];
 
     public $timestamps = true;
 

@@ -28,7 +28,7 @@
                         <div class="panel-heading">Data Pasien</div>
                         <div class="panel-body">
                             <!-- form start -->
-                            <form class="form-horizontal">
+                            <div class="form-horizontal">
                                 <div class="box-body">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Pasien</label>
@@ -37,15 +37,12 @@
                                                     style="width: 100%">
                                                 <option value="">-- PILIH PASIEN --</option>
                                                 @foreach($data as $datapasien)
-                                                    @if($datapasien->status_rawat == 'tidak')
-                                                        <option value="{{$datapasien->id}}">{{$datapasien->nama}} &nbsp;&nbsp;#nik={{$datapasien->nik}}
-                                                            &nbsp;#alamat={{$datapasien->alamat}}
-                                                            &nbsp;#no_rm={{$datapasien->no_rm}}
-                                                        </option>
-                                                    @endif
+                                                    <option value="{{$datapasien->id}}">{{$datapasien->nama}} &nbsp;&nbsp;#nik={{$datapasien->nik}}
+                                                        &nbsp;#alamat={{$datapasien->alamat}}
+                                                        &nbsp;#no_rm={{$datapasien->no_rm}}
+                                                    </option>
                                                 @endforeach
                                             </select>
-
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -66,24 +63,24 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Bayar</label>
                                         <div class=" col-sm-4">
-                                            <select name="id_pembayaran" class="form-control">
+                                            <select id="id_pembayaran" class="form-control">
                                                 @foreach($bayar as $databayar)
-                                                    <option value="{{$databayar->id_pembayaran}}">{{$databayar->jenis_pembayaran}}</option>
+                                                    <option value="{{$databayar->id}}">{{$databayar->jenis_pembayaran}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <label class="col-sm-3 control-label">No. Asuransi</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control" placeholder="">
+                                            <input id="nomor_asuransi" type="text" class="form-control" placeholder="">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Diagnosa</label>
                                         <div class="col-sm-10">
-                                            <select name="id_diagnosis" class="form-control select2">
+                                            <select id="id_diagnosis" class="form-control select2">
                                                 <option value="">-- PILIH DIAGNOSA --</option>
                                                 @foreach($diagnosis as $datadiagnosa)
-                                                    <option value="{{$datadiagnosa->id_diagnosis}}">{{$datadiagnosa->nama_penyakit}}
+                                                    <option value="{{$datadiagnosa->id}}">{{$datadiagnosa->nama_penyakit}}
                                                         &nbsp;#kode_dtd={{$datadiagnosa->kode_dtd}}
                                                         &nbsp;#kode_icd={{$datadiagnosa->kode_icd}}</option>
                                                 @endforeach
@@ -165,7 +162,7 @@
                                         <div class=" col-sm-10">
                                             <select id="id_rumah_sakit_rujuks" class="form-control select2"
                                                     width="100%" style="width: 100%">
-                                                <option value="null">-- PILIH --</option>
+                                                <option value="">-- PILIH --</option>
                                                 @foreach($datars as $rs)
                                                     <option value="{{$rs->id}}">{{$rs->nama_rs}}</option>
                                                 @endforeach
@@ -176,7 +173,7 @@
                                 <div class="box-footer">
                                     <button id="simpan" class="btn btn-default pull-right">Simpan</button>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -267,10 +264,138 @@
             $('.select2').select2();
         });
 
-        $('#simpan').click(function () {
-            if ($('#id_pasien').val() != '' && $('#id_kamar').val() != '' && $('#id_diagnosis').val() != '' && $('#tgl_masuk').val() != '') {
+        function refreshTable(response) {
+            $('#table_pasien tbody').html('');
+            $.each(response.data.dataRiwayats, function (index, obj) {
+                $('#table_pasien tbody').append('' +
+                    '<tr>' +
+                    '<td>' + obj.pasien.no_rm + '</td>' +
+                    '<td>' + obj.pasien.nama + '</td>' +
+                    '<td>' + obj.diagnosis.nama_penyakit + '</td>' +
+                    '<td>' + obj.tgl_masuk + '</td>' +
+                    '<td>' + obj.tgl_keluar + '</td>' +
+                    '</tr>')
+            });
+            alert(response.message);
+        }
 
-            }
-        })
+        function simpan() {
+            var value = {
+                id_pasien: $('#id_pasien').val(),
+                id_kamar: $('#id_kamar').val(),
+                id_pembayaran: $('#id_pembayaran').val(),
+                no_asuransi: $('#nomor_asuransi').val(),
+                id_diagnosis: $('#id_diagnosis').val(),
+                tgl_masuk: $('#tgl_masuk').val(),
+                tgl_lapor: $('#tgl_lapor').val(),
+                tgl_keluar: $('#tgl_keluar').val(),
+                pindah_dari: $('#pindah_dari').val(),
+                pindah_ke: $('#pindah_ke').val(),
+                status_keluar: $('#status_keluar').val(),
+                pulang_paksa: $('#pulang_paksa').val(),
+                id_rumah_sakit_rujuks: $('#id_rumah_sakit_rujuks').val(),
+            };
+
+            var url = "/riwayat";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: value,
+                success: function (response) {
+                    refreshTable(response);
+                }
+            });
+        }
+
+        $(function () {
+            $('#simpan').click(function () {
+                if ($('#id_pasien').val() != '' && $('#id_kamar').val() != '' && $('#id_diagnosis').val() != '' && $('#tgl_masuk').val() != '' && $('#tgl_lapor').val() != '') {
+                    if ($('#id_pembayaran').val() != 2) {
+                        if ($('#pindah_dari').val() == '') {
+                            if ($('#pindah_ke').val() != '') {
+                                alert('Kamar Asal Harus Di Isi');
+                            } else {
+                                if ($('#status_keluar').val() != 'Dirujuk') {
+                                    if ($('#id_rumah_sakit_rujuks').val() != '') {
+                                        alert('Status Keluar Pasien Bukan Rujukan');
+                                    } else {
+                                        simpan();
+                                    }
+                                } else {
+                                    if ($('#id_rumah_sakit_rujuks').val() != '') {
+                                        simpan();
+                                    } else {
+                                        alert('Rumah Sakit Rujukan Harus Di Isi')
+                                    }
+                                }
+                            }
+                        } else {
+                            if ($('#pindah_ke').val() != '') {
+                                if ($('#status_keluar').val() != 'Dirujuk') {
+                                    if ($('#id_rumah_sakit_rujuks').val() != '') {
+                                        alert('Status Keluar Pasien Bukan Rujukan');
+                                    } else {
+                                        simpan();
+                                    }
+                                } else {
+                                    if ($('#id_rumah_sakit_rujuks').val() != '') {
+                                        simpan();
+                                    } else {
+                                        alert('Rumah Sakit Rujukan Harus Di Isi')
+                                    }
+                                }
+                            } else {
+                                alert('Kamar Tujuan Harus Di Isi');
+                            }
+                        }
+                    } else {
+                        if ($('#nomor_asuransi').val() != '') {
+                            if ($('#pindah_dari').val() == '') {
+                                if ($('#pindah_ke').val() != '') {
+                                    alert('Kamar Asal Harus Di Isi');
+                                } else {
+                                    if ($('#status_keluar').val() != 'Dirujuk') {
+                                        if ($('#id_rumah_sakit_rujuks').val() != '') {
+                                            alert('Status Keluar Pasien Bukan Rujukan');
+                                        } else {
+                                            simpan();
+                                        }
+                                    } else {
+                                        if ($('#id_rumah_sakit_rujuks').val() != '') {
+                                            simpan();
+                                        } else {
+                                            alert('Rumah Sakit Rujukan Harus Di Isi');
+                                        }
+                                    }
+                                }
+                            } else {
+                                if ($('#pindah_ke').val() != '') {
+                                    if ($('#status_keluar').val() != 'Dirujuk') {
+                                        if ($('#id_rumah_sakit_rujuks').val() != '') {
+                                            alert('Status Keluar Pasien Bukan Rujukan');
+                                        } else {
+                                            simpan();
+                                        }
+                                    } else {
+                                        if ($('#id_rumah_sakit_rujuks').val() != '') {
+                                            simpan();
+                                        } else {
+                                            alert('Rumah Sakit Rujukan Harus Di Isi');
+                                        }
+                                    }
+                                } else {
+                                    alert('Kamar Tujuan Harus Di Isi');
+                                }
+                            }
+                        } else {
+                            alert('Nomor Asuransi Harus di Isi');
+                        }
+                    }
+                } else {
+                    alert('Mohon Lengkapi Data')
+                }
+            })
+        });
     </script>
 @endpush
