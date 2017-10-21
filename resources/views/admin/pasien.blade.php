@@ -37,9 +37,9 @@
                                                     style="width: 100%">
                                                 <option value="">-- PILIH PASIEN --</option>
                                                 @foreach($data as $datapasien)
-                                                    <option value="{{$datapasien->id}}">{{$datapasien->nama}} &nbsp;&nbsp;#nik={{$datapasien->nik}}
-                                                        &nbsp;#alamat={{$datapasien->alamat}}
-                                                        &nbsp;#no_rm={{$datapasien->no_rm}}
+                                                    <option value="{{$datapasien->id}}">NO RM={{$datapasien->no_rm}} NAMA={{$datapasien->nama}} &nbsp;
+                                                        &nbsp;ALAMAT={{$datapasien->alamat}}
+                                                        &nbsp;
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -69,10 +69,6 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <label class="col-sm-3 control-label">No. Asuransi</label>
-                                        <div class="col-sm-3">
-                                            <input id="nomor_asuransi" type="text" class="form-control" placeholder="">
-                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Diagnosa</label>
@@ -96,45 +92,30 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Tanggal Lapor</label>
-                                        <div class="col-sm-10">
-                                            <input id="tgl_lapor" type="text" class="form-control form_datetime"
-                                                   placeholder="" data-date-format='yyyy-mm-dd'>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label class="col-sm-2 control-label">Tanggal Keluar</label>
                                         <div class="col-sm-10">
                                             <input id="tgl_keluar" type="text" class="form-control form_datetime"
                                                    placeholder="" data-date-format='yyyy-mm-dd'>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Pindah Dari</label>
-                                        <div class=" col-sm-10">
+                                </div><!-- /.box-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                            <select id="pindah_dari" class="form-control select2">
-                                                <option value="">-- TIDAK --</option>
-                                                @foreach($kamar as $databangsal)
-                                                    <option value="{{$databangsal->id}}">
-                                                        <b>#nama_bangsal={{$databangsal->nama_kamar}}</b>
-                                                        &nbsp;#kelas={{$databangsal->jenisLayanan->jenis_pelayanan}}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                <div class="col-md-6">
+                    <div class="panel panel-blue">
+                        <div class="panel-body">
+                            <!-- form start -->
+                            <div class="form-horizontal">
+                                <div class="box-body">
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Pindah Ke</label>
-                                        <div class="col-sm-10">
-                                            <select id="pindah_ke" class="form-control select2">
-                                                <option value="">-- TIDAK --</option>
-                                                @foreach($kamar as $databangsal)
-                                                    <option value="{{$databangsal->id}}">
-                                                        <b>#nama_bangsal={{$databangsal->nama_kamar}}</b>
-                                                        &nbsp;#kelas={{$databangsal->jenisLayanan->jenis_pelayanan}}
-                                                    </option>
-                                                @endforeach
+                                        <label class="col-sm-2 control-label">Pindah</label>
+                                        <div class=" col-sm-4">
+                                            <select id="pindah" class="form-control">
+                                                <option value="ya">YA</option>
+                                                <option value="tidak">TIDAK</option>
                                             </select>
                                         </div>
                                     </div>
@@ -177,33 +158,31 @@
                         </div>
                     </div>
                 </div>
-
-
-                <!-- Start ini -->
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Riwayat Pasien</div>
-                        <div class="panel-body">
-                            <!-- form start -->
-                            <form class="form-horizontal">
-                                <div class="box-body">
-                                    <table id="tableRiwayat" class="table table-bordered table-hover">
-                                        <thead class="bg-ocean-blue">
-                                        <tr>
-                                            <th>Tanggal Masuk</th>
-                                            <th>Diagnosis</th>
-                                            <th>Kamar</th>
-                                            <th>Status Keluar</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                {{--<!-- Start ini -->--}}
+                {{--<div class="col-md-6">--}}
+                    {{--<div class="panel panel-default">--}}
+                        {{--<div class="panel-heading">Riwayat Pasien</div>--}}
+                        {{--<div class="panel-body">--}}
+                            {{--<!-- form start -->--}}
+                            {{--<form class="form-horizontal">--}}
+                                {{--<div class="box-body">--}}
+                                    {{--<table id="tableRiwayat" class="table table-bordered table-hover">--}}
+                                        {{--<thead class="bg-ocean-blue">--}}
+                                        {{--<tr>--}}
+                                            {{--<th>Tanggal Masuk</th>--}}
+                                            {{--<th>Diagnosis</th>--}}
+                                            {{--<th>Kamar</th>--}}
+                                            {{--<th>Status Keluar</th>--}}
+                                        {{--</tr>--}}
+                                        {{--</thead>--}}
+                                        {{--<tbody>--}}
+                                        {{--</tbody>--}}
+                                    {{--</table>--}}
+                                {{--</div>--}}
+                            {{--</form>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
             </div>
         </section><!-- /.Left col -->
         <section class="content">

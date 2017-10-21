@@ -19,7 +19,7 @@ class UserTableSeeder extends Seeder
                 'id_level' => 1,
                 'id_petugas' => 2,
                 'name' => 'Linda Suteja',
-                'email' => 'direktur@wijayakusuma.com',
+                'username' => 'direktur',
                 'password' => bcrypt('direktur'),
                 'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
                 'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString()
@@ -29,7 +29,7 @@ class UserTableSeeder extends Seeder
                 'id_level' => 2,
                 'id_petugas' => 1,
                 'name' => 'Adi Sucahyo',
-                'email' => 'adipetugas@wijayakusuma.com',
+                'username' => 'petugas',
                 'password' => bcrypt('petugas'),
                 'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
                 'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString()

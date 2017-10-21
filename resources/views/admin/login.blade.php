@@ -31,7 +31,7 @@
 
 						<fieldset>
 							<div class="form-group">
-								<input class="form-control" placeholder="Email" name="email" type="email" autofocus="">
+								<input class="form-control" placeholder="username" name="username" type="text" autofocus="">
 							</div>
 							<div class="form-group">
 								<input class="form-control" placeholder="Password" name="password" type="password" value="">

@@ -18,13 +18,10 @@ class CreateRiwayatsTable extends Migration
             $table->integer('id_pasien')->unsigned();
             $table->integer('id_kamar')->unsigned();
             $table->integer('id_pembayaran')->unsigned();
-            $table->string('no_asuransi')->nullable();
             $table->integer('id_diagnosis')->unsigned();
             $table->dateTime('tgl_masuk');
-            $table->dateTime('tgl_lapor');
             $table->dateTime('tgl_keluar')->nullable();
-            $table->integer('pindah_dari')->unsigned()->nullable();
-            $table->integer('pindah_ke')->unsigned()->nullable();
+            $table->enum('pindah', ['ya', 'tidak']);
             $table->enum('pulang_paksa', ['Ya', 'Tidak']);
             $table->integer('jumlah_hari_perawatan')->nullable();
             $table->integer('jumlah_lama_perawatan')->nullable();
@@ -36,8 +33,6 @@ class CreateRiwayatsTable extends Migration
             $table->foreign('id_kamar')->references('id')->on('kamars');
             $table->foreign('id_pembayaran')->references('id')->on('jenis_pembayarans');
             $table->foreign('id_diagnosis')->references('id')->on('diagnoses');
-            $table->foreign('pindah_dari')->references('id')->on('kamars');
-            $table->foreign('pindah_ke')->references('id')->on('kamars');
             $table->foreign('id_rumah_sakit_rujuks')->references('id')->on('rumah_sakit_rujuks');
         });
     }
