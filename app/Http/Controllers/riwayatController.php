@@ -20,12 +20,13 @@ class riwayatController extends Controller
      */
     public function index()
     {
-        $data = pasien::all();
+        $data = pasien::where('status_rawat', 'tidak')->get();
         $kamar = kamar::all();
         $bayar = jenisPembayaran::all();
         $diagnosis = diagnosis::all();
         $datars = RumahSakitRujuk::all();
-        return view('admin.pasien', compact('data', 'kamar', 'bayar', 'diagnosis', 'datars'));
+        $riwayat = riwayat::whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'DESC')->get();
+        return view('admin.pasien', compact('data', 'kamar', 'bayar', 'diagnosis', 'datars','riwayat'));
     }
 
     /**
@@ -48,9 +49,12 @@ class riwayatController extends Controller
     {
         $hariRawat = 0;
         $lamaRawat = 0;
-        if ($request['tgl_keluar'] != '') {
-            $hariRawat = (date_diff($request['tgl_keluar'], $request['tgl_masuk']) + 1);
-            $lamaRawat = date_diff($request['tgl_keluar'], $request['tgl_masuk']);
+        if ($request->tgl_keluar != '') {
+            $convert_keluar = new \DateTime($request->tgl_keluar);
+            $convert_masuk = new \DateTime($request->tgl_masuk);
+            $difftanggal = $convert_masuk->diff($convert_keluar);
+            $hariRawat = $difftanggal->days + 1;
+            $lamaRawat = $difftanggal->days;
         }
 
         $date = Carbon::now('Asia/Jakarta')->toDateTimeString();
@@ -79,27 +83,36 @@ class riwayatController extends Controller
 ////        $response["data"] = compact('dataRiwayats');
 //        return response()->json($response, 201);
 
-        $riwayats = riwayat::create([
-            "id_pasien" => $request['id_pasien'],
-            "id_kamar" => $request['id_kamar'],
-            "id_pembayaran" => $request['id_pembayaran'],
-            "no_asuransi" => $request['no_asuransi'],
-            "id_diagnosis" => $request['id_diagnosis'],
-            "tgl_masuk" => $request['tgl_masuk'],
-            "tgl_lapor" => $request['tgl_lapor'],
-            "tgl_keluar" => $request['tgl_keluar'],
-            "pindah_dari" => $request['pindah_dari'],
-            "pindah_ke" => $request['pindah_ke'],
-            "pulang_paksa" => $request['pulang_paksa'],
-            "status_keluar" => $request['status_keluar'],
+        $datanya = [
+            "id_pasien" => $request->id_pasien,
+            "id_kamar" => $request->id_kamar,
+            "id_pembayaran" => $request->id_pembayaran,
+            "id_diagnosis" => $request->id_diagnosis,
+            "tgl_masuk" => $request->tgl_masuk,
+            "pindah" => $request->pindah,
+            "pulang_paksa" => $request->pulang_paksa,
+            "status_keluar" => $request->status_keluar,
             "jumlah_hari_perawatan" => $hariRawat,
             "jumlah_lama_perawatan" => $lamaRawat,
-            "id_rumah_sakit_rujuks" => $request['id_rumah_sakit_rujuks']
-        ]);
+
+        ];
+        if ($request->tgl_keluar != ''){
+            $datanya["tgl_keluar"] = $request->tgl_keluar;
+        }
+        if ($request->status_keluar == "Dirujuk"){
+            $datanya["id_rumah_sakit_rujuks"] = $request->id_rumah_sakit_rujuks;
+        }
+
+        $riwayats = riwayat::create($datanya);
 
         $dataRiwayats = riwayat::with(['pasien', 'diagnosis'])->where('created_at','=', $date)->get();
 
         if ($riwayats){
+            if ($request->tgl_keluar == ''){
+                pasien::find($request->id_pasien)->update(
+                    ['status_rawat' => 'dirawat']
+                );
+            }
             $response["message"] = "Data Berhasil Di Simpan";
             $response["data"] = compact('dataRiwayats');
             return response()->json($response, 201);

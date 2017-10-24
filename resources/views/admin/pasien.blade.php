@@ -114,8 +114,8 @@
                                         <label class="col-sm-2 control-label">Pindah</label>
                                         <div class=" col-sm-4">
                                             <select id="pindah" class="form-control">
-                                                <option value="ya">YA</option>
                                                 <option value="tidak">TIDAK</option>
+                                                <option value="ya">YA</option>
                                             </select>
                                         </div>
                                     </div>
@@ -133,8 +133,8 @@
                                         <label class="col-sm-2 control-label">Pulang Paksa</label>
                                         <div class="col-sm-10">
                                             <select id="pulang_paksa" class="form-control ">
-                                                <option value="Ya">Ya</option>
                                                 <option value="Tidak">Tidak</option>
+                                                <option value="Ya">Ya</option>
                                             </select>
                                         </div>
                                     </div>
@@ -208,8 +208,7 @@
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <table id="table_pasien" data-toggle="table" data-search="true"
-                                   data-select-item-name="toolbar1"
+                            <table id="table_pasien"
                                    data-pagination="true" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
@@ -221,6 +220,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @foreach($riwayat as $datahariini)
+                                    <tr>
+                                        <td>{{ $datahariini->pasien->no_rm }}</td>
+                                        <td>{{ $datahariini->pasien->nama }}</td>
+                                        <td>{{ $datahariini->diagnosis->nama_penyakit }}</td>
+                                        <td>{{ $datahariini->tgl_masuk }}</td>
+                                        <td>{{ $datahariini->tgl_keluar }}</td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div><!-- /.box-body -->
@@ -256,24 +264,27 @@
                     '</tr>')
             });
             alert(response.message);
+            setTimeout(function() {
+                window.location.href='{{ route('riwayat.index') }}';
+            }, 1000);
         }
 
-        function simpan() {
+        function simpan(posisi) {
             var value = {
                 id_pasien: $('#id_pasien').val(),
                 id_kamar: $('#id_kamar').val(),
                 id_pembayaran: $('#id_pembayaran').val(),
-                no_asuransi: $('#nomor_asuransi').val(),
                 id_diagnosis: $('#id_diagnosis').val(),
                 tgl_masuk: $('#tgl_masuk').val(),
-                tgl_lapor: $('#tgl_lapor').val(),
                 tgl_keluar: $('#tgl_keluar').val(),
-                pindah_dari: $('#pindah_dari').val(),
-                pindah_ke: $('#pindah_ke').val(),
-                status_keluar: $('#status_keluar').val(),
+                pindah: $('#pindah').val(),
+                status_keluar : $('#status_keluar').val(),
                 pulang_paksa: $('#pulang_paksa').val(),
-                id_rumah_sakit_rujuks: $('#id_rumah_sakit_rujuks').val(),
             };
+
+            if (posisi == 'Dirujuk'){
+                value.id_rumah_sakit_rujuks = $('#id_rumah_sakit_rujuks').val();
+            }
 
             var url = "/riwayat";
 
@@ -289,90 +300,22 @@
 
         $(function () {
             $('#simpan').click(function () {
-                if ($('#id_pasien').val() != '' && $('#id_kamar').val() != '' && $('#id_diagnosis').val() != '' && $('#tgl_masuk').val() != '' && $('#tgl_lapor').val() != '') {
-                    if ($('#id_pembayaran').val() != 2) {
-                        if ($('#pindah_dari').val() == '') {
-                            if ($('#pindah_ke').val() != '') {
-                                alert('Kamar Asal Harus Di Isi');
-                            } else {
-                                if ($('#status_keluar').val() != 'Dirujuk') {
-                                    if ($('#id_rumah_sakit_rujuks').val() != '') {
-                                        alert('Status Keluar Pasien Bukan Rujukan');
-                                    } else {
-                                        simpan();
-                                    }
-                                } else {
-                                    if ($('#id_rumah_sakit_rujuks').val() != '') {
-                                        simpan();
-                                    } else {
-                                        alert('Rumah Sakit Rujukan Harus Di Isi')
-                                    }
-                                }
-                            }
-                        } else {
-                            if ($('#pindah_ke').val() != '') {
-                                if ($('#status_keluar').val() != 'Dirujuk') {
-                                    if ($('#id_rumah_sakit_rujuks').val() != '') {
-                                        alert('Status Keluar Pasien Bukan Rujukan');
-                                    } else {
-                                        simpan();
-                                    }
-                                } else {
-                                    if ($('#id_rumah_sakit_rujuks').val() != '') {
-                                        simpan();
-                                    } else {
-                                        alert('Rumah Sakit Rujukan Harus Di Isi')
-                                    }
-                                }
-                            } else {
-                                alert('Kamar Tujuan Harus Di Isi');
-                            }
+                if ($('#id_pasien').val() != '' && $('#id_kamar').val() != '' && $('#id_pembayaran').val() != '' && $('#id_diagnosis').val() != '' && $('#tgl_masuk').val() != '' && $('#pindah').val() != '' && $('#pulang_paksa').val() != ''){
+                    if ($('#status_keluar').val() == 'Dirujuk'){
+                        if ($('#id_rumah_sakit_rujuks').val() != ''){
+                            simpan('Dirujuk');
+                        }else {
+                            alert('Pilih Rumah Sakit yang akan dirujuk');
                         }
-                    } else {
-                        if ($('#nomor_asuransi').val() != '') {
-                            if ($('#pindah_dari').val() == '') {
-                                if ($('#pindah_ke').val() != '') {
-                                    alert('Kamar Asal Harus Di Isi');
-                                } else {
-                                    if ($('#status_keluar').val() != 'Dirujuk') {
-                                        if ($('#id_rumah_sakit_rujuks').val() != '') {
-                                            alert('Status Keluar Pasien Bukan Rujukan');
-                                        } else {
-                                            simpan();
-                                        }
-                                    } else {
-                                        if ($('#id_rumah_sakit_rujuks').val() != '') {
-                                            simpan();
-                                        } else {
-                                            alert('Rumah Sakit Rujukan Harus Di Isi');
-                                        }
-                                    }
-                                }
-                            } else {
-                                if ($('#pindah_ke').val() != '') {
-                                    if ($('#status_keluar').val() != 'Dirujuk') {
-                                        if ($('#id_rumah_sakit_rujuks').val() != '') {
-                                            alert('Status Keluar Pasien Bukan Rujukan');
-                                        } else {
-                                            simpan();
-                                        }
-                                    } else {
-                                        if ($('#id_rumah_sakit_rujuks').val() != '') {
-                                            simpan();
-                                        } else {
-                                            alert('Rumah Sakit Rujukan Harus Di Isi');
-                                        }
-                                    }
-                                } else {
-                                    alert('Kamar Tujuan Harus Di Isi');
-                                }
-                            }
-                        } else {
-                            alert('Nomor Asuransi Harus di Isi');
+                    }else {
+                        if ($('#id_rumah_sakit_rujuks').val() == ''){
+                            simpan('lain');
+                        }else {
+                            alert('Rumah sakit rujuk Wajib dikosongkan karena status keluar bukan dirujuk ');
                         }
                     }
-                } else {
-                    alert('Mohon Lengkapi Data')
+                }else {
+                    alert('Isi kelengkapan Data!');
                 }
             })
         });
