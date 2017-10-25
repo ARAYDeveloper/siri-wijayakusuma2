@@ -311,12 +311,12 @@
                     }else {
                         if ($('#tgl_keluar').val() == ''){
                             if ($('#status_keluar').val() == 'Belum'){
-
+                                simpan('belumkeluar');
                             }else {
                                 alert('Jika tanggal keluar kosong maka Status Keluar Pilih BELUM');
                             }
                         }else {
-                            if ($('#status_keluar').val() != 'Belum'){
+                            if ($('#status_keluar').val() != 'Belum' && $('#tgl_keluar').val() != ''){
                                 if ($('#id_rumah_sakit_rujuks').val() == ''){
                                     simpan('lain');
                                 }else {
