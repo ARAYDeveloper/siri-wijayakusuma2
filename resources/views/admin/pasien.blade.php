@@ -123,6 +123,7 @@
                                         <label class="col-sm-2 control-label">Status Keluar</label>
                                         <div class=" col-sm-10">
                                             <select id="status_keluar" class="form-control ">
+                                                <option value="Belum">Belum</option>
                                                 <option value="Hidup">Hidup</option>
                                                 <option value="Dirujuk">Dirujuk</option>
                                                 <option value="Meninggal">Meninggal</option>
@@ -308,11 +309,24 @@
                             alert('Pilih Rumah Sakit yang akan dirujuk');
                         }
                     }else {
-                        if ($('#id_rumah_sakit_rujuks').val() == ''){
-                            simpan('lain');
+                        if ($('#tgl_keluar').val() == ''){
+                            if ($('#status_keluar').val() == 'Belum'){
+
+                            }else {
+                                alert('Jika tanggal keluar kosong maka Status Keluar Pilih BELUM');
+                            }
                         }else {
-                            alert('Rumah sakit rujuk Wajib dikosongkan karena status keluar bukan dirujuk ');
+                            if ($('#status_keluar').val() != 'Belum'){
+                                if ($('#id_rumah_sakit_rujuks').val() == ''){
+                                    simpan('lain');
+                                }else {
+                                    alert('Rumah sakit rujuk Wajib dikosongkan karena status keluar bukan dirujuk ');
+                                }
+                            }else{
+                                alert('Pemilihan Status Keluar keliru. Periksa Kembali')
+                            }
                         }
+
                     }
                 }else {
                     alert('Isi kelengkapan Data!');
