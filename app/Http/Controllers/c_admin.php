@@ -6,6 +6,8 @@ use App;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\kamar;
+use App\jenisPelayanan;
 
 class c_admin extends Controller
 {
@@ -29,10 +31,25 @@ class c_admin extends Controller
     public function laporan_external_rl12(){
     	return view('admin.laporan_external_rl12');
     }
-    public function laporan_external_rl13(){
-        return view('admin.laporan_external_rl13');
+    public function laporan_external_rl13($tahunnya = null){
+        $datatahun = kamar::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
+        if ($tahunnya != null) {
+            $kamarnya = kamar::whereYear('created_at',$tahunnya)->get();
+            $datapelayanan = jenisPelayanan::all();
+//            $datanya[] = '';
+//            for ($i = 0; $i < count($datapelayanan); $i++) {
+//                $datakamar = kamar::where('id_pelayanan', $datapelayanan[$i]->id)->whereYear('created_at',$tahunnya)->get();
+//                for ($j = 0; $j < count($datakamar); $j++) {
+//                    $datanya[$i][$j] = $datakamar;
+//                }
+//            }
+        return view('admin.laporan_external_rl13', compact('datatahun','tahunnya','kamarnya','datapelayanan'));
+        }
+
+        return view('admin.laporan_external_rl13', compact('datatahun', 'tahunnya'));
     }
     public function laporan_external_rl31(){
+
         return view('admin.laporan_external_rl31');
     }
     public function laporan_external_rl4a(){

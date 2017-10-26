@@ -39,7 +39,7 @@ Route::group(["middleware" => "auth"], function (){
     Route::get('/adm_lap_in', 'c_admin@laporan_internal')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex', 'c_admin@laporan_external')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl12', 'c_admin@laporan_external_rl12')->middleware('rule:direktur|petugas');
-    Route::get('/adm_lap_ex_rl13', 'c_admin@laporan_external_rl13')->middleware('rule:direktur|petugas');
+    Route::get('/adm_lap_ex_rl13/{tahunnya?}', 'c_admin@laporan_external_rl13')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl31', 'c_admin@laporan_external_rl31')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl4a', 'c_admin@laporan_external_rl4a')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl53', 'c_admin@laporan_external_rl53')->middleware('rule:direktur|petugas');

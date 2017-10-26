@@ -26,18 +26,15 @@
                             <div>
                                 <ol class="breadcrumb">
                                     <li>
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option selected="selected">Tahun</option>
-                                            <option>2017</option>
-                                            <option>2018</option>
-                                            <option>2019</option>
-                                            <option>2020</option>
-                                            <option>2021</option>
-                                            <option>2022</option>
+                                        <select id="tahunlapor" class="form-control select2" style="width: 100%;">
+                                            <option value="" selected="selected">Tahun</option>
+                                            @foreach($datatahun as $tahun)
+                                                <option value="{{ $tahun->tahun }}">{{ $tahun->tahun }}</option>
+                                            @endforeach
                                         </select>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn btn-primary">Tampil</button>
+                                        <button id="tampilkan" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
                                     <li><a href="/adm_ctk_lap_ex_rl13" target="_blank" class="btn btn-default">Print</a>
                                     </li>
@@ -65,7 +62,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tahun</td>
-                                    <td>2017</td>
+                                    <td>@if($tahunnya == null) - @else {{$tahunnya}} @endif</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -77,6 +74,9 @@
                     <!-- <small>advanced tables</small> -->
                 </h3>
                 <div class="box-body">
+                    @if($tahunnya == null)
+                        <h3><center>Silahkan Pilih Tahun Dulu</center></h3>
+                    @else
                     <table id="example2"class="table table-bordered table-hover">
                         <thead>
                         <tr>
@@ -86,45 +86,51 @@
                             <th colspan="7" data-field="text" data-sortable="true">Perincian Tempat Tidur Kelas</th>
                         </tr>
                         <tr>
-                            <th data-field="text" data-sortable="true">VIP atas</th>
-                            <th data-field="text" data-sortable="true">VIP bawah</th>
-                            <th data-field="text" data-sortable="true">Mawar</th>
-                            <th data-field="text" data-sortable="true">Melati</th>
-                            <th data-field="text" data-sortable="true">Dahlia</th>
-                            <th data-field="text" data-sortable="true">Seruni</th>
-                            <th data-field="text" data-sortable="true">HCU</th>
-                        </tr>
-                        <tr>
-                            <th data-field="text" data-sortable="true">1</th>
-                            <th data-field="text" data-sortable="true">2</th>
-                            <th data-field="text" data-sortable="true">3</th>
-                            <th data-field="text" data-sortable="true">4</th>
-                            <th data-field="text" data-sortable="true">5</th>
-                            <th data-field="text" data-sortable="true">6</th>
-                            <th data-field="text" data-sortable="true">7</th>
-                            <th data-field="text" data-sortable="true">8</th>
-                            <th data-field="text" data-sortable="true">9</th>
-                            <th data-field="text" data-sortable="true">10</th>
+                            @foreach($kamarnya as $kamarlapor)
+                                <th data-field="text" data-sortable="true">{{ $kamarlapor->nama_kamar }}</th>
+                            @endforeach
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Kesehatan Anak</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Penyakit Dalam</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Obstetri</td>
-                        </tr>
+                            @php($i=0)
+                            @foreach($datapelayanan as $pelayanan)
+                                @php($i++)
+                                <tr>
+                                    <td>{{ $i }}</td>
+                                    <td>{{ $pelayanan->jenis_pelayanan }}</td>
+                                    @php($okejumlahtt = \App\kamar::where('id_pelayanan', $pelayanan->id)->whereYear('created_at',$tahunnya)->sum('jumlah'))
+                                        <td>{{ $okejumlahtt }}</td>
+                                    @foreach($kamarnya as $kamarlapor2)
+                                        @php($cekkamar = \App\kamar::where('id_pelayanan', $pelayanan->id)->whereYear('created_at', $tahunnya)->where('id', $kamarlapor2->id)->first())
+                                        @if($cekkamar != null)
+                                            @php($okejumlahkamar = \App\kamar::where('id_pelayanan', $pelayanan->id)->whereYear('created_at', $tahunnya)->where('id', $kamarlapor2->id)->sum('jumlah'))
+                                            <td>{{ $okejumlahkamar }}</td>
+                                        @else
+                                            <td>0</td>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                             @endforeach
                         </tbody>
                     </table>
+                    @endif
                 </div><!-- /.box-body -->
             </div>
         </section>
     </div>
     <!-- </div> -->
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+
+            $('#tampilkan').click(function () {
+                if ($('#tahunlapor').val() != ''){
+                    window.location.href = '/adm_lap_ex_rl13/' + $('#tahunlapor').val();
+                }else{
+                    alert('Pilih Tahun');
+                }
+            })
+        })
+    </script>
+@endpush
