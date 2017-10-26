@@ -83,7 +83,7 @@
                             <th rowspan="2" data-field="text" data-sortable="true">No</th>
                             <th rowspan="2" data-field="text" data-sortable="true">Jenis Pelayanan</th>
                             <th rowspan="2" data-field="text" data-sortable="true">Jumlah TT</th>
-                            <th colspan="7" data-field="text" data-sortable="true">Perincian Tempat Tidur Kelas</th>
+                            <th colspan="7" data-field="text" data-sortable="true" ><center>Perincian Tempat Tidur Kelas</center></th>
                         </tr>
                         <tr>
                             @foreach($kamarnya as $kamarlapor)
