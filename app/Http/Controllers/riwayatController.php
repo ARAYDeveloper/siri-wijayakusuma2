@@ -26,7 +26,7 @@ class riwayatController extends Controller
         $diagnosis = diagnosis::all();
         $datars = RumahSakitRujuk::all();
         $riwayat = riwayat::whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'DESC')->get();
-        return view('admin.pasien', compact('data', 'kamar', 'bayar', 'diagnosis', 'datars','riwayat'));
+        return view('admin.pasien', compact('data', 'kamar', 'bayar', 'diagnosis', 'datars', 'riwayat'));
     }
 
     /**
@@ -96,19 +96,19 @@ class riwayatController extends Controller
             "jumlah_lama_perawatan" => $lamaRawat,
 
         ];
-        if ($request->tgl_keluar != ''){
+        if ($request->tgl_keluar != '') {
             $datanya["tgl_keluar"] = $request->tgl_keluar;
         }
-        if ($request->status_keluar == "Dirujuk"){
+        if ($request->status_keluar == "Dirujuk") {
             $datanya["id_rumah_sakit_rujuks"] = $request->id_rumah_sakit_rujuks;
         }
 
         $riwayats = riwayat::create($datanya);
 
-        $dataRiwayats = riwayat::with(['pasien', 'diagnosis'])->where('created_at','=', $date)->get();
+        $dataRiwayats = riwayat::with(['pasien', 'diagnosis'])->where('created_at', '=', $date)->get();
 
-        if ($riwayats){
-            if ($request->tgl_keluar == ''){
+        if ($riwayats) {
+            if ($request->tgl_keluar == '') {
                 pasien::find($request->id_pasien)->update(
                     ['status_rawat' => 'dirawat']
                 );
@@ -116,7 +116,7 @@ class riwayatController extends Controller
             $response["message"] = "Data Berhasil Di Simpan";
             $response["data"] = compact('dataRiwayats');
             return response()->json($response, 201);
-        }else{
+        } else {
             $response["message"] = "Data Gagal Di Simpan";
             $response["data"] = compact('dataRiwayats');
             return response()->json($response, 501);
@@ -154,7 +154,61 @@ class riwayatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $riwayat = riwayat::where('id', $id)->first();
+        $hariRawat = 0;
+        $lamaRawat = 0;
+        if ($request->tgl_keluar != '') {
+            $convert_keluar = new \DateTime($request->tgl_keluar);
+            $convert_masuk = new \DateTime($riwayat->tgl_masuk);
+            $difftanggal = $convert_masuk->diff($convert_keluar);
+            $hariRawat = $difftanggal->days + 1;
+            $lamaRawat = $difftanggal->days;
+        }
+
+        $updates1 = riwayat::where('id', $id)->update([
+            'pulang_paksa' => $request->pulang_paksa,
+            'status_keluar' => $request->status_keluar,
+            'jumlah_hari_perawatan' => $hariRawat,
+            'jumlah_lama_perawatan' => $lamaRawat,
+            'tgl_keluar' => $request->tgl_keluar,
+            'id_rumah_sakit_rujuks' => null
+        ]);
+
+        if ($request->status_keluar == "Dirujuk") {
+            $updates2 = riwayat::where('id', $id)->update([
+                'id_rumah_sakit_rujuks' => $request->id_rumah_sakit_rujuks
+            ]);
+        }
+
+        $dataRiwayats = riwayat::with(['pasien', 'diagnosis', 'kamar'])->where('tgl_keluar', null)->get();
+        $dataRiwayatKeluar = riwayat::with(['pasien', 'diagnosis', 'kamar'])->where('tgl_keluar', '<>', null)->get();
+        if ($updates1) {
+            if ($request->status_keluar == "Dirujuk") {
+                if ($updates2) {
+                    pasien::where('id', $riwayat->id_pasien)->update(
+                        ['status_rawat' => 'tidak']
+                    );
+                    $response["message"] = "Data Berhasil Di Simpan";
+                    $response["data"] = compact('dataRiwayats', 'dataRiwayatKeluar');
+                    return response()->json($response, 201);
+                } else {
+                    $response["message"] = "Data Gagal Di Simpan";
+                    $response["data"] = compact('dataRiwayats', 'dataRiwayatKeluar');
+                    return response()->json($response, 501);
+                }
+            } else {
+                pasien::where('id', $riwayat->id_pasien)->update(
+                    ['status_rawat' => 'tidak']
+                );
+                $response["message"] = "Data Berhasil Di Simpan";
+                $response["data"] = compact('dataRiwayats', 'dataRiwayatKeluar');
+                return response()->json($response, 201);
+            }
+        } else {
+            $response["message"] = "Data Gagal Di Simpan";
+            $response["data"] = compact('dataRiwayats', 'dataRiwayatKeluar');
+            return response()->json($response, 501);
+        }
     }
 
     /**

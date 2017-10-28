@@ -16,25 +16,29 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-
                             <div class="box-body">
-                                <table id="example2" data-toggle="table" data-search="true" data-select-item-name="toolbar1" data-pagination="true" class="table table-bordered table-hover">
+                                <table id="example2" data-toggle="table" data-search="true"
+                                       data-select-item-name="toolbar1" data-pagination="true"
+                                       class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th data-field="text" data-sortable="true">Nama</th>
-                                        <th data-field="text">No. RM</th>
-                                        <th data-field="text" data-sortable="true">Keluhan</th>
-                                        <th data-field="text" data-sortable="true">Kamar</th>
+                                        <th>Nama</th>
+                                        <th>No. RM</th>
+                                        <th>Keluhan</th>
+                                        <th>Kamar</th>
                                         <th data-field="text" data-sortable="true">Tanggal Masuk</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                    </tr>
+                                    @foreach($data as $pas)
+                                        <tr>
+                                            <td>{{$pas->pasien->nama}}</td>
+                                            <td>{{$pas->pasien->no_rm}}</td>
+                                            <td>{{$pas->diagnosis->nama_penyakit}}</td>
+                                            <td>{{$pas->kamar->nama_kamar}}</td>
+                                            <td>{{$pas->tgl_masuk}}</td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div><!-- /.box-body -->

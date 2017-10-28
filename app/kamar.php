@@ -16,4 +16,9 @@ class kamar extends Model
     {
         return $this->belongsTo('App\jenisPelayanan','id_pelayanan','id');
     }
+
+    public function riwayat()
+    {
+        return $this->hasMany(riwayat::class, 'id_kamar','id');
+    }
 }

@@ -26,4 +26,9 @@ class riwayat extends Model
     {
         return $this->belongsTo(diagnosis::class, 'id_diagnosis');
     }
+
+    public function kamar()
+    {
+        return $this->belongsTo(kamar::class, 'id_kamar');
+    }
 }
