@@ -57,10 +57,17 @@ class c_admin extends Controller
         return view('admin.laporan_external_rl13', compact('datatahun', 'tahunnya'));
     }
 
-    public function laporan_external_rl31()
+    public function laporan_external_rl31($tahun = 2016)
     {
-
-        return view('admin.laporan_external_rl31');
+        $datatahun = riwayat::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
+        if ($tahun != null) {
+            $pelayanan = jenisPelayanan::all();
+            $riwayats = riwayat::all();
+            $pasien = App\pasien::all();
+            $kamar = kamar::all();
+            return view('admin.laporan_external_rl31', compact('datatahun', 'pelayanan', 'tahun', 'pasien', 'riwayats', 'kamar'));
+        }
+        return view('admin.laporan_external_rl31', compact('datatahun'));
     }
 
     public function laporan_external_rl4a()

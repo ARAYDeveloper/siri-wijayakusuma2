@@ -55,7 +55,6 @@ Route::group(["middleware" => "auth"], function (){
 // Transaksi
     Route::get('/adm_t_pas_masuk', 'c_admin@t_pasien_masuk');
     Route::get('/adm_t_pas_keluar', 'c_admin@t_pasien_keluar');
-    Route::post('/riwayat/keluarkan', 'riwayatController@keluarkan');
 });
 
 
