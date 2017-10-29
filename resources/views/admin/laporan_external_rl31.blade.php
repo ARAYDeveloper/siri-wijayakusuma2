@@ -62,7 +62,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tahun</td>
-                                    <td>@if($tahun == null) - @else {{$tahun-1}} @endif</td>
+                                    <td>@if($tahunnya == null) - @else {{$tahunnya-1}} @endif</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -120,18 +120,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @php($i = 0)
-                        @foreach($pelayanan as $layanan)
-                            @php($i++)
-                            <tr>
-                                <td>{{$i}}</td>
-                                <td>{{$layanan->jenis_pelayanan}}</td>
-                                @if($tahun != null)
-                                    @php($pasienawal = \App\riwayat::join('kamars as k', 'r.id_kamar', '=', 'k.id')->whereYear('r.created_at', ($tahun))->where('id_pelayanan', $layanan->id)->count())
-                                @else @php($pasienawal = '-') @endif;
-                                <td>{{$pasienawal}}</td>
-                            </tr>
-                        @endforeach
+                        {{--@php($i = 0)--}}
+                        {{--@foreach($pelayanan as $layanan)--}}
+                            {{--@php($i++)--}}
+                            {{--<tr>--}}
+                                {{--<td>{{$i}}</td>--}}
+                                {{--<td>{{$layanan->jenis_pelayanan}}</td>--}}
+                                {{--@if($tahun != null)--}}
+                                    {{--@php($pasienawal = \App\riwayat::join('kamars as k', 'r.id_kamar', '=', 'k.id')->whereYear('r.created_at', ($tahun))->where('id_pelayanan', $layanan->id)->count())--}}
+                                {{--@else @php($pasienawal = '-') @endif;--}}
+                                {{--<td>{{$pasienawal}}</td>--}}
+                            {{--</tr>--}}
+                        {{--@endforeach--}}
                         </tbody>
                     </table>
                 </div><!-- /.box-body -->

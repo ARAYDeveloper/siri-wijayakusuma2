@@ -49,9 +49,14 @@ class riwayatController extends Controller
     {
         $hariRawat = 0;
         $lamaRawat = 0;
+        $lamaJam = 0;
         if ($request->tgl_keluar != '') {
             $convert_keluar = new \DateTime($request->tgl_keluar);
             $convert_masuk = new \DateTime($request->tgl_masuk);
+            $cekmasuk = Carbon::parse($request->tgl_masuk);
+            $cekkeluar = Carbon::parse($request->tgl_keluar);
+            $diffhours = $cekkeluar->diffInHours($cekmasuk);
+            $lamaJam = $diffhours;
             $difftanggal = $convert_masuk->diff($convert_keluar);
             $hariRawat = $difftanggal->days + 1;
             $lamaRawat = $difftanggal->days;
@@ -101,6 +106,13 @@ class riwayatController extends Controller
         }
         if ($request->status_keluar == "Dirujuk") {
             $datanya["id_rumah_sakit_rujuks"] = $request->id_rumah_sakit_rujuks;
+        }
+        if ($request->status_keluar == "Meninggal"){
+            if ($lamaJam <= 48){
+                $datanya["kurang_48"] = '1';
+            }elseif ($lamaJam >48){
+                $datanya["lebih_48"] = '1';
+            }
         }
 
         $riwayats = riwayat::create($datanya);

@@ -36,7 +36,7 @@ Route::group(["middleware" => "auth"], function (){
 
 
     // Laporan
-    Route::get('/adm_lap_in', 'c_admin@laporan_internal')->middleware('rule:direktur|petugas');
+    Route::get('/adm_lap_in/{tahunnya?}', 'c_admin@laporan_internal')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex', 'c_admin@laporan_external')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl12', 'c_admin@laporan_external_rl12')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl13/{tahunnya?}', 'c_admin@laporan_external_rl13')->middleware('rule:direktur|petugas');

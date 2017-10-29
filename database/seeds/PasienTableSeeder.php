@@ -40,7 +40,7 @@ class PasienTableSeeder extends Seeder
                 'kewarganegaraan' => 'WNI',
                 'status' => 'Kawin',
                 'no_rm' => '788',
-                'status_rawat' => 'dirawat',
+                'status_rawat' => 'tidak',
                 'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
                 'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString()
             ]

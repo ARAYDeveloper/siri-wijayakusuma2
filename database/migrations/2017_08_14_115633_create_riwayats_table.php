@@ -25,6 +25,8 @@ class CreateRiwayatsTable extends Migration
             $table->enum('pulang_paksa', ['Ya', 'Tidak']);
             $table->integer('jumlah_hari_perawatan')->nullable();
             $table->integer('jumlah_lama_perawatan')->nullable();
+            $table->enum('kurang_48',['0','1']);
+            $table->enum('lebih_48',['0','1']);
             $table->enum('status_keluar', ['Belum','Meninggal', 'Hidup', 'Dirujuk']);
             $table->integer('id_rumah_sakit_rujuks')->unsigned()->nullable();
             $table->timestamps();

@@ -26,26 +26,26 @@
                             <div>
                                 <ol class="breadcrumb">
                                     <li>
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option selected="selected">Tahun</option>
-                                            <option>2017</option>
-                                            <option>2018</option>
-                                            <option>2019</option>
-                                            <option>2020</option>
-                                            <option>2021</option>
-                                            <option>2022</option>
+                                        <select id="tahunlapor" class="form-control select2" style="width: 100%;">
+                                            <option value="" selected="selected">Tahun</option>
+                                            @foreach($datatahun as $th)
+                                                <option value="{{ $th->tahun }}">{{ $th->tahun }}</option>
+                                            @endforeach
                                         </select>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn btn-primary">Tampil</button>
+                                        <button id="tampilkan" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
                                     <li><a href="/adm_ctk_lap_in" target="_blank"
-                                           class="btn btn-default">Print</a></button></li>
+                                           class="btn btn-default">Print</a></li>
                                 </ol>
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <table id="example2" data-toggle="table" class="table table-bordered table-hover">
+                            @if($tahunnya == null)
+                                <h3><center>Silahkan Pilih Tahun Dulu</center></h3>
+                            @else
+                                <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
                                     <th data-field="id" data-sortable="true">Bulan</th>
@@ -67,59 +67,42 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>Januari</td>
-                                    <!-- <td>29</td>
-                                    <td>2</td>
-                                    <td>212</td>
-                                    <td>224</td>
-                                    <td>225</td>
-                                    <td>212</td>
-                                    <td>122</td>
-                                    <td>522</td>
-                                    <td>222</td>
-                                    <td>922</td>
-                                    <td>212</td>
-                                    <td>022</td>
-                                    <td>1</td>
-                                    <td>0</td>
-                                    <td>10</td> -->
-                                </tr>
-                                <tr>
-                                    <td>Februari</td>
-                                </tr>
-                                <tr>
-                                    <td>Maret</td>
-                                </tr>
-                                <tr>
-                                    <td>April</td>
-                                </tr>
-                                <tr>
-                                    <td>Mei</td>
-                                </tr>
-                                <tr>
-                                    <td>Juni</td>
-                                </tr>
-                                <tr>
-                                    <td>Juli</td>
-                                </tr>
-                                <tr>
-                                    <td>Agustus</td>
-                                </tr>
-                                <tr>
-                                    <td>September</td>
-                                </tr>
-                                <tr>
-                                    <td>Oktober</td>
-                                </tr>
-                                <tr>
-                                    <td>November</td>
-                                </tr>
-                                <tr>
-                                    <td>Desember</td>
-                                </tr>
+                                @for($i=0; $i<count($datanya); $i++)
+                                    <tr>
+                                        <td>{{ $datanya[$i]["bulan"] }}</td>
+                                        <td>{{ $datanya[$i]["pasienawal"] }}</td>
+                                        <td>{{ $datanya[$i]["pasienmasuk"] }}</td>
+                                        <td>{{ $datanya[$i]["pasienkeluar"] }}</td>
+                                        <td>{{ $datanya[$i]["sisapasien"] }}</td>
+                                        <td>{{ $datanya[$i]["jml_hari_perawatan"] }}</td>
+                                        <td>{{ $datanya[$i]["jml_lama_dirawat"] }}</td>
+                                        <td>{{ $datanya[$i]["tt"] }}</td>
+                                        <td>{{ $datanya[$i]["periode"] }}</td>
+                                        <td>{{ round($datanya[$i]["jml_hari_perawatan"]/($datanya[$i]["tt"] * $datanya[$i]["periode"]) * 100, 2) }}</td>
+                                        @if($datanya[$i]["pasienkeluar"] != 0)
+                                            <td>{{ round($datanya[$i]["jml_lama_dirawat"]/$datanya[$i]["pasienkeluar"],2) }}</td>
+                                        @else
+                                            <td>0</td>
+                                        @endif
+                                        @if($datanya[$i]["tt"] != 0)
+                                            <td>{{ round($datanya[$i]["pasienkeluar"]/$datanya[$i]["tt"],2) }}</td>
+                                        @else
+                                            <td>0</td>
+                                        @endif
+                                        <td>{{ $datanya[$i]["mati_kurang_48"] }}</td>
+                                        <td>{{ $datanya[$i]["mati_lebih_48"] }}</td>
+                                        @if($datanya[$i]["pasienkeluar"] != 0)
+                                            <td>{{ round($datanya[$i]["mati_lebih_48"]/$datanya[$i]["pasienkeluar"] * 1000,2) }}</td>
+                                            <td>{{ round($datanya[$i]["mati_kurang_48"]+$datanya[$i]["mati_lebih_48"]/$datanya[$i]["pasienkeluar"] * 1000,2) }}</td>
+                                        @else
+                                            <td>0</td>
+                                            <td>0</td>
+                                        @endif
+                                    </tr>
+                                @endfor
                                 </tbody>
                             </table>
+                            @endif
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
                 </div>
@@ -127,4 +110,19 @@
         </section>
     </div>
     <!-- </div> -->
-    @endsection
+@endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+
+            $('#tampilkan').click(function () {
+                if ($('#tahunlapor').val() != ''){
+                    window.location.href = '/adm_lap_in/' + $('#tahunlapor').val();
+                }else{
+                    alert('Pilih Tahun');
+                }
+            })
+        })
+    </script>
+@endpush
