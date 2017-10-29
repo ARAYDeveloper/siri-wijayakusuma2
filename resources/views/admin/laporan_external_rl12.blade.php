@@ -26,29 +26,23 @@
                             <div>
                                 <ol class="breadcrumb">
                                     <li>
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option selected="selected">Tahun</option>
-                                            <option>2017</option>
-                                            <option>2018</option>
-                                            <option>2019</option>
-                                            <option>2020</option>
-                                            <option>2021</option>
-                                            <option>2022</option>
+                                        <select id="tahunlapor" class="form-control select2" style="width: 100%;">
+                                            <option value="" selected="selected">Tahun</option>
+                                            @foreach($datatahun as $tahun)
+                                                <option value="{{ $tahun->tahun }}">{{ $tahun->tahun }}</option>
+                                            @endforeach
                                         </select>
                                     </li>
                                     <li>
-                                        <select class="form-control select2">
-                                            <option selected="selected">Kamar</option>
-                                            <option>A</option>
-                                            <option>B</option>
-                                            <option>C</option>
-                                            <option>D</option>
-                                            <option>E</option>
-                                            <option>F</option>
+                                        <select id="kamarlapor" class="form-control select2">
+                                            <option value="" selected="selected">Kamar</option>
+                                            @foreach($datakamar as $kamar)
+                                                <option value="{{ $kamar->nama_kamar }}">{{ $kamar->nama_kamar }}</option>
+                                            @endforeach
                                         </select>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn btn-primary">Tampil</button>
+                                        <button id="tampilkan" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
                                     <li><a href="/adm_ctk_lap_ex_rl12" target="_blank" class="btn btn-default">Print</a>
                                     </li>
@@ -76,7 +70,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tahun</td>
-                                    <td>2017</td>
+                                    <td>@if($tahunnya == null) - @else {{$tahunnya}} @endif</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -88,7 +82,10 @@
                     <!-- <small>advanced tables</small> -->
                 </h3>
                 <div class="box-body">
-                    <table id="example2" data-toggle="table" class="table table-bordered table-hover">
+                    @if($tahunnya == null)
+                        <h3><center>Silahkan Pilih Tahun Dulu</center></h3>
+                    @else
+                        <table id="example2" data-toggle="table" class="table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th data-field="text" data-sortable="true">Tahun</th>
@@ -115,6 +112,7 @@
                         <td>2017</td>
                         </tbody>
                     </table>
+                    @endif
                 </div><!-- /.box-body -->
             </div>
         </section>

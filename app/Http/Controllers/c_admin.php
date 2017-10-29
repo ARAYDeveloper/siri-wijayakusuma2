@@ -140,9 +140,118 @@ class c_admin extends Controller
         return view('admin.laporan_internal', compact('datatahun','tahunnya','datanya'));
     }
 
-    public function laporan_external_rl12()
+    public function laporan_external_rl12($tahunnya = null, $kamarid = null)
     {
-        return view('admin.laporan_external_rl12', compact('datatahun'));
+        $datatahun = riwayat::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
+        $datakamar = kamar::all();
+        $datanya[] ='';
+        if ($tahunnya != null && $kamarid != null) {
+            for ($i = 0; $i < 12; $i++) {
+                $pasienawal = 0;
+                $pasienmasuk = 0;
+                $pasienkeluar = 0;
+                $sisapasien = '';
+                $jml_hari_perawatan = 0;
+                $jml_lama_dirawat = 0;
+                $tt = 0;
+                $periode =0;
+                $mati_kurang_48 = 0;
+                $mati_lebih_48 = 0;
+
+                //hitung pasien awal
+                if ($i == 0) {
+                    $cekpasienawal = riwayat::whereYear('tgl_masuk', $tahunnya - 1)->whereMonth('tgl_masuk', '12')->whereNull('tgl_keluar')->get();
+                    if ($cekpasienawal != null) {
+                        $pasienawal = riwayat::whereYear('tgl_masuk', $tahunnya - 1)->whereMonth('tgl_masuk', '12')->whereNull('tgl_keluar')->count('tgl_masuk');
+                    } else {
+                        $pasienawal = 0;
+                    }
+                } else {
+                    $cekpasienawal = riwayat::whereYear('tgl_masuk', $tahunnya)->whereMonth('tgl_masuk', $i)->whereNull('tgl_keluar')->get();
+                    if ($cekpasienawal != null) {
+                        $pasienawal = riwayat::whereYear('tgl_masuk', $tahunnya)->whereMonth('tgl_masuk', $i)->whereNull('tgl_keluar')->count('tgl_masuk');
+                    } else {
+                        $pasienawal = 0;
+                    }
+                }
+
+                //hitung pasien masuk
+                $cekpasienmasuk = riwayat::whereYear('tgl_masuk', $tahunnya)->whereMonth('tgl_masuk', $i + 1)->get();
+                if ($cekpasienmasuk != null) {
+                    $pasienmasuk = riwayat::whereYear('tgl_masuk', $tahunnya)->whereMonth('tgl_masuk', $i + 1)->count('tgl_masuk');
+                } else {
+                    $pasienmasuk = 0;
+                }
+
+                //hitung pasien keluar
+                $cekpasienkeluar = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->get();
+                if ($cekpasienkeluar != null) {
+                    $pasienkeluar = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->count('tgl_keluar');
+                } else {
+                    $pasienkeluar = 0;
+                }
+
+                //hitung sisa pasien
+                $ceksisapasien = riwayat::whereNull('tgl_keluar')->whereYear('tgl_masuk', $tahunnya)->whereMonth('tgl_masuk', $i + 1)->get();
+                if ($ceksisapasien != null) {
+                    $sisapasien = riwayat::whereNull('tgl_keluar')->whereYear('tgl_masuk', $tahunnya)->whereMonth('tgl_masuk', $i + 1)->count('tgl_masuk');
+                } else {
+                    $sisapasien = 0;
+                }
+
+                //hitung jumlah hari perawatan
+                $cekjml_hari_perawatan = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->get();
+                if ($cekjml_hari_perawatan != null) {
+                    $jml_hari_perawatan = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->sum('jumlah_hari_perawatan');
+                } else {
+                    $jml_hari_perawatan = 0;
+                }
+
+                //jumlah lama dirawat
+                $cekjml_lama_dirawat = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->get();
+                if ($cekjml_lama_dirawat != null) {
+                    $jml_lama_dirawat = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->sum('jumlah_lama_perawatan');
+                } else {
+                    $jml_lama_dirawat = 0;
+                }
+
+                //jumlah tt
+                $tt = kamar::count();
+
+                //hitung periode
+                $periode = cal_days_in_month(CAL_GREGORIAN, $i + 1, $tahunnya);
+
+                //hitung mati <= 48 jam
+                $cekmati_kurang_48 = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->where('status_keluar', 'Meninggal')->where('kurang_48', '=', '1')->get();
+                if ($cekmati_kurang_48 != null) {
+                    $mati_kurang_48 = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->where('status_keluar', 'Meninggal')->where('kurang_48', '=', '1')->count('kurang_48');
+                } else {
+                    $mati_kurang_48 = 0;
+                }
+
+                //hitung mati > 48 jam
+                $cekmati_lebih_48 = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->where('status_keluar', 'Meninggal')->where('lebih_48', '=', '1')->get();
+                if ($cekmati_lebih_48 != null) {
+                    $mati_lebih_48 = riwayat::whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->whereMonth('tgl_keluar', $i + 1)->where('status_keluar', 'Meninggal')->where('lebih_48', '=', '1')->sum('lebih_48');
+                } else {
+                    $mati_lebih_48 = 0;
+                }
+
+                $datanya[$i]['bulan'] = date("F", mktime(0, 0, 0, $i + 1, 1));
+                $datanya[$i]['pasienawal'] = $pasienawal;
+                $datanya[$i]['pasienmasuk'] = $pasienmasuk;
+                $datanya[$i]['pasienkeluar'] = $pasienkeluar;
+                $datanya[$i]['sisapasien'] = $sisapasien;
+                $datanya[$i]['jml_hari_perawatan'] = $jml_hari_perawatan;
+                $datanya[$i]['jml_lama_dirawat'] = $jml_lama_dirawat;
+                $datanya[$i]['tt'] = $tt;
+                $datanya[$i]['periode'] = $periode;
+                $datanya[$i]['mati_kurang_48'] = $mati_kurang_48;
+                $datanya[$i]['mati_lebih_48'] = $mati_lebih_48;
+            }
+        }
+
+        return view('admin.laporan_external_rl12', compact('datatahun','datakamar','tahunnya'));
     }
 
     public function laporan_external_rl13($tahunnya = null)
