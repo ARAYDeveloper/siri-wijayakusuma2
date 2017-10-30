@@ -147,8 +147,8 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
                                 class="glyphicon glyphicon-user"></span><b> User</b> <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#"><span class="glyphicon glyphicon-user"></span></span>   Profile</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+                        {{--<li><a href="#"><span class="glyphicon glyphicon-user"></span></span>   Profile</a></li>--}}
+                        {{--<li><a href="#"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>--}}
                         <li><a href="{{ route('logout.index') }}"><span class="glyphicon glyphicon-remove-circle"></span> Logout</a></li>
                     </ul>
                 </li>
