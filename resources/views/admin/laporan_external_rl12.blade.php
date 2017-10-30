@@ -37,7 +37,7 @@
                                         <select id="kamarlapor" class="form-control select2">
                                             <option value="" selected="selected">Kamar</option>
                                             @foreach($datakamar as $kamar)
-                                                <option value="{{ $kamar->nama_kamar }}">{{ $kamar->nama_kamar }}</option>
+                                                <option value="{{ $kamar->id }}">{{ $kamar->nama_kamar }}</option>
                                             @endforeach
                                         </select>
                                     </li>
@@ -58,7 +58,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-body">
-                            <table id="example2" data-toggle="table" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-bordered table-hover">
                                 <tbody>
                                 <tr>
                                     <td>Kode RS</td>
@@ -85,31 +85,38 @@
                     @if($tahunnya == null)
                         <h3><center>Silahkan Pilih Tahun Dulu</center></h3>
                     @else
-                        <table id="example2" data-toggle="table" class="table table-bordered table-hover">
+                        <table id="example2" class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th data-field="text" data-sortable="true">Tahun</th>
-                            <th data-field="text" data-sortable="true">BOR</th>
-                            <th data-field="text" data-sortable="true">LOS</th>
-                            <th data-field="text" data-sortable="true">TOI</th>
-                            <th data-field="text" data-sortable="true">BTO</th>
-                            <th data-field="text" data-sortable="true">NDR</th>
-                            <th data-field="text" data-sortable="true">GDR</th>
-                            <th data-field="text" data-sortable="true">Rata-Rata Kunjungan Per Hari</th>
+                            <th data-field="text" >Tahun</th>
+                            <th data-field="text" >BOR</th>
+                            <th data-field="text" >LOS</th>
+                            <th data-field="text" >TOI</th>
+                            <th data-field="text" >BTO</th>
+                            <th data-field="text" >NDR</th>
+                            <th data-field="text" >GDR</th>
+                            <th data-field="text" >Rata-Rata Kunjungan Per Hari</th>
                         </tr>
                         <tr>
-                            <th data-field="text" data-sortable="true">1</th>
-                            <th data-field="text" data-sortable="true">2</th>
-                            <th data-field="text" data-sortable="true">3</th>
-                            <th data-field="text" data-sortable="true">4</th>
-                            <th data-field="text" data-sortable="true">5</th>
-                            <th data-field="text" data-sortable="true">6</th>
-                            <th data-field="text" data-sortable="true">7</th>
-                            <th data-field="text" data-sortable="true">8</th>
+                            <th data-field="text" >1</th>
+                            <th data-field="text" >2</th>
+                            <th data-field="text" >3</th>
+                            <th data-field="text" >4</th>
+                            <th data-field="text" >5</th>
+                            <th data-field="text" >6</th>
+                            <th data-field="text" >7</th>
+                            <th data-field="text" >8</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <td>2017</td>
+                        <td>{{ $tahunnya }}</td>
+                        <td>{{ $datanya['bor'] }}</td>
+                        <td>{{ $datanya['los'] }}</td>
+                        <td>{{ $datanya['toi'] }}</td>
+                        <td>{{ $datanya['bto'] }}</td>
+                        <td>{{ $datanya['ndr'] }}</td>
+                        <td>{{ $datanya['gdr'] }}</td>
+                        <td>{{ $datanya['kunjungan'] }}</td>
                         </tbody>
                     </table>
                     @endif
@@ -119,3 +126,18 @@
     </div>
     <!-- </div> -->
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+
+            $('#tampilkan').click(function () {
+                if ($('#tahunlapor').val() != '' && $('#kamarlapor').val() != ''){
+                    console.log('halo');
+                    window.location.href = '/adm_lap_ex_rl12/' + $('#tahunlapor').val() + '/' + $('#kamarlapor').val();
+                }else{
+                    alert('Tahun atau kamar belum dipilij');
+                }
+            })
+        })
+    </script>
+@endpush
