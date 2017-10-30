@@ -35,16 +35,8 @@
                                                 <div class="box-body">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <input type="hidden" name="id_pasien" id="id_pasien"
+                                                            <input type="text" name="id_pasien" id="id_pasien"
                                                                    value="">
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">NIK</label>
-                                                                <div class="col-sm-7">
-                                                                    <input name="nik" id="nik" value="" type="text"
-                                                                           class="form-control"
-                                                                           placeholder="NIK Pasien">
-                                                                </div>
-                                                            </div>
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">Nama</label>
                                                                 <div class="col-sm-7">
@@ -155,7 +147,6 @@
                                    data-pagination="true" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th data-field="id" data-sortable="true">NIK</th>
                                     <th>Nama</th>
                                     <th data-sortable="true">Tanggal Lahir</th>
                                     <th data-sortable="true">Alamat</th>
@@ -171,7 +162,6 @@
                                 <tbody id="listdata">
                                 @foreach($pasien as $pas)
                                     <tr>
-                                        <td>{{$pas->nik}}</td>
                                         <td>{{$pas->nama}}</td>
                                         <td>{{$pas->tgl_lahir}}</td>
                                         <td>{{$pas->alamat}}</td>
@@ -213,16 +203,16 @@
                         <input type="hidden" id="del_id" value="">
                         <label>Apakah Anda Yakin Akan Menghapus Pasien</label><br>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">NIK</label>
+                            <label class="col-sm-3 control-label">Nama</label>
                             <div class="col-sm-8">
-                                <input name="del_nik" id="del_nik" value="" type="text"
+                                <input name="del_nama" id="del_nama" value="" type="text"
                                        class="form-control" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Nama</label>
+                            <label class="col-sm-3 control-label">Nomer RM</label>
                             <div class="col-sm-8">
-                                <input name="del_nama" id="del_nama" value="" type="text"
+                                <input name="del_no_rm" id="del_no_rm" value="" type="text"
                                        class="form-control" readonly>
                             </div>
                         </div>
@@ -240,56 +230,59 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(function () {
-        $('input[name="tgl_lahir"]').datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, autoclose: true});
+    <script>
+        $(function () {
+            $('input[name="tgl_lahir"]').datepicker({
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true
+            });
 
-        $("#nik").keypress(function (e) {
-            //if the letter is not digit then display error and don't type anything
-            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57) && (e.keyCode < 96 || e.keyCode > 105)) {
-                //display error message
-                return false;
-            }
+//            $("#nik").keypress(function (e) {
+//                //if the letter is not digit then display error and don't type anything
+//                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57) && (e.keyCode < 96 || e.keyCode > 105)) {
+//                    //display error message
+//                    return false;
+//                }
+//            });
+
         });
 
-    });
+        function resetForm() {
+            $('#id_pasien').val('');
+            $('#nama').val('');
+            $('#alamat').val('');
+            $('#tgl_lahir').val('');
+            $('#jenis_kelamin').find('option').prop('selected', function () {
+                return this.defaultSelected;
+            });
+            $('#agama').find('option').prop('selected', function () {
+                return this.defaultSelected;
+            });
+            $('#warga').find('option').prop('selected', function () {
+                return this.defaultSelected;
+            });
+            $('#status').find('option').prop('selected', function () {
+                return this.defaultSelected;
+            });
+            $('#no_rm').val('');
+        }
 
-    function resetForm() {
-        $('#id_pasien').val('');
-        $('#nik').val('');
-        $('#nama').val('');
-        $('#alamat').val('');
-        $('#tgl_lahir').val('');
-        $('#jenis_kelamin').find('option').prop('selected', function () {
-            return this.defaultSelected;
-        });
-        $('#agama').find('option').prop('selected', function () {
-            return this.defaultSelected;
-        });
-        $('#warga').find('option').prop('selected', function () {
-            return this.defaultSelected;
-        });
-        $('#status').find('option').prop('selected', function () {
-            return this.defaultSelected;
-        });
-        $('#no_rm').val('');
-    }
+        function bukaCollapse() {
+            $('#collapse1').collapse('show');
+        }
 
-    function bukaCollapse() {
-        $('#collapse1').collapse('show');
-    }
+        function tutupCollapse() {
+            resetForm();
+            $('#collapse1').collapse('hide');
+        }
 
-    function tutupCollapse() {
-        resetForm();
-        $('#collapse1').collapse('hide');
-    }
-
-    function refreshTable(response) {
-        $('#listdata').html('');
-        $.each(response.data.dataPasien, function (index, obj) {
-            $('#listdata').append('' +
+        function refreshTable(response) {
+            $('#listdata').html('');
+            $.each(response.data.dataPasien, function (index, obj) {
+                $('#listdata').append('' +
                     '<tr>' +
-                    '<td>' + obj.nik + '</td>' +
                     '<td>' + obj.nama + '</td>' +
                     '<td>' + obj.tgl_lahir + '</td>' +
                     '<td>' + obj.alamat + '</td>' +
@@ -304,134 +297,139 @@
                     ' <button class="btn btn-danger btn-sm btn-detail btn-hapus" data_id="' + obj.id + '">Hapus</button>' +
                     '</td>' +
                     '</tr>')
-        });
-        alert(response.message);
-        ubah();
-        hapus();
-    }
-
-    function ubah() {
-        $(".btn-ubah").click(function () {
-            $.ajax({
-                url: "/pasien/" + $(this).attr('data_id'),
-                type: "GET",
-                success: function (response) {
-                    var obj = response.data.dataPasien;
-                    $('#id_pasien').val(obj.id);
-                    $('#nik').val(obj.nik);
-                    $('#nama').val(obj.nama);
-                    $('#alamat').val(obj.alamat);
-                    $('#tgl_lahir').val(obj.tgl_lahir);
-                    $('#jenis_kelamin').val(obj.jenis_kelamin);
-                    $('#agama').val(obj.agama);
-                    $('#warga').val(obj.kewarganegaraan);
-                    $('#status').val(obj.status);
-                    $('#no_rm').val(obj.no_rm);
-                    bukaCollapse();
-                }
             });
-        });
-    }
+            alert(response.message);
+            ubah();
+            hapus();
+        }
 
-    function hapus() {
-        $(".btn-hapus").click(function () {
-            $('#del_id').val($(this).attr('data_id'));
-            $.ajax({
-                url: "/pasien/" + $(this).attr('data_id'),
-                type: "GET",
-                success: function (response) {
-                    $('#del_nik').val(response.data.dataPasien.nik);
-                    $('#del_nama').val(response.data.dataPasien.nama);
-                    $('#delete_modal').modal('show');
-                }
-            });
-        });
-    }
-
-    function tutupModal() {
-        $('#del_id').val('');
-        $('#del_nik').val('');
-        $('#del_nama').val('');
-        $('#delete_modal').modal('hide');
-    }
-
-    $('#tbh_data').click(function () {
-        bukaCollapse();
-    });
-
-    $('#batal').click(function () {
-        tutupCollapse();
-    });
-
-    $('#batal_hapus').click(function () {
-        tutupModal();
-    });
-
-    $(function () {
-        $('#yakin_hapus').click(function () {
-            $.ajax({
-                url: "/pasien/" + $('#del_id').val(),
-                type: "DELETE",
-                success: function (response) {
-                    refreshTable(response);
-                    tutupModal();
-                }
-            });
-        });
-    });
-
-    $(function () {
-        $('#simpan').click(function () {
-            if ($('#id_pasien').val() == "") {
-                var value = {
-                    nik: $('#nik').val(),
-                    nama: $('#nama').val(),
-                    alamat: $('#alamat').val(),
-                    tgl_lahir: $('#tgl_lahir').val(),
-                    jenis_kelamin: $('#jenis_kelamin').val(),
-                    agama: $('#agama').val(),
-                    warga: $('#warga').val(),
-                    status: $('#status').val(),
-                    no_rm: $('#no_rm').val(),
-                };
-                var url = "/pasien";
-
+        function ubah() {
+            $(".btn-ubah").click(function () {
                 $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: value,
+                    url: "/pasien/" + $(this).attr('data_id'),
+                    type: "GET",
                     success: function (response) {
-                        refreshTable(response);
-                        tutupCollapse();
+                        var obj = response.data.dataPasien;
+                        $('#id_pasien').val(obj.id);
+                        $('#nama').val(obj.nama);
+                        $('#alamat').val(obj.alamat);
+                        $('#tgl_lahir').val(obj.tgl_lahir);
+                        $('#jenis_kelamin').val(obj.jenis_kelamin);
+                        $('#agama').val(obj.agama);
+                        $('#warga').val(obj.kewarganegaraan);
+                        $('#status').val(obj.status);
+                        $('#no_rm').val(obj.no_rm);
+                        bukaCollapse();
                     }
                 });
-            } else {
-                var value = {
-                    nik: $('#nik').val(),
-                    nama: $('#nama').val(),
-                    alamat: $('#alamat').val(),
-                    tgl_lahir: $('#tgl_lahir').val(),
-                    jenis_kelamin: $('#jenis_kelamin').val(),
-                    agama: $('#agama').val(),
-                    warga: $('#warga').val(),
-                    status: $('#status').val(),
-                    no_rm: $('#no_rm').val(),
-                };
-                var url = "/pasien/" + $('#id_pasien').val();
+            });
+        }
 
+        function hapus() {
+            $(".btn-hapus").click(function () {
+                $('#del_id').val($(this).attr('data_id'));
                 $.ajax({
-                    url: url,
-                    type: "PATCH",
-                    data: value,
+                    url: "/pasien/" + $(this).attr('data_id'),
+                    type: "GET",
                     success: function (response) {
-                        refreshTable(response);
-                        tutupCollapse();
+                        $('#del_no_rm').val(response.data.dataPasien.no_rm);
+                        $('#del_nama').val(response.data.dataPasien.nama);
+                        $('#delete_modal').modal('show');
                     }
                 });
-            }
+            });
+        }
+
+        function tutupModal() {
+            $('#del_id').val('');
+            $('#del_no_rm').val('');
+            $('#del_nama').val('');
+            $('#delete_modal').modal('hide');
+        }
+
+        $('#tbh_data').click(function () {
+            bukaCollapse();
         });
-        ubah();
-        hapus();
-    });
-</script>
+
+        $('#batal').click(function () {
+            tutupCollapse();
+        });
+
+        $('#batal_hapus').click(function () {
+            tutupModal();
+        });
+
+        $(function () {
+            $('#yakin_hapus').click(function () {
+                $.ajax({
+                    url: "/pasien/" + $('#del_id').val(),
+                    type: "DELETE",
+                    success: function (response) {
+                        refreshTable(response);
+                        tutupModal();
+                    }
+                });
+            });
+        });
+
+        $(function () {
+            $('#simpan').click(function () {
+                if ($('#id_pasien').val() == "") {
+                    var value = {
+                        nama: $('#nama').val(),
+                        alamat: $('#alamat').val(),
+                        tgl_lahir: $('#tgl_lahir').val(),
+                        jenis_kelamin: $('#jenis_kelamin').val(),
+                        agama: $('#agama').val(),
+                        warga: $('#warga').val(),
+                        status: $('#status').val(),
+                        no_rm: $('#no_rm').val(),
+                    };
+                    var url = "/pasien";
+
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: value,
+                        success: function (response) {
+                            if (response.message != 'No RM sudah terdaftar !') {
+                                refreshTable(response);
+                                tutupCollapse();
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    });
+                } else {
+                    var value = {
+                        nama: $('#nama').val(),
+                        alamat: $('#alamat').val(),
+                        tgl_lahir: $('#tgl_lahir').val(),
+                        jenis_kelamin: $('#jenis_kelamin').val(),
+                        agama: $('#agama').val(),
+                        warga: $('#warga').val(),
+                        status: $('#status').val(),
+                        no_rm: $('#no_rm').val(),
+                    };
+                    var url = "/pasien/" + $('#id_pasien').val();
+
+                    $.ajax({
+                        url: url,
+                        type: "PATCH",
+                        data: value,
+                        success: function (response) {
+                            if (response.message != 'No RM Sudah Terdaftar Atas Nama Pasien Lain') {
+                                refreshTable(response);
+                                tutupCollapse();
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    });
+                }
+            });
+            ubah();
+            hapus();
+        });
+    </script>
 @endpush

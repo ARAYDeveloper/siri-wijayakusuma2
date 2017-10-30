@@ -36,18 +36,22 @@ class pasienController extends Controller
      */
     public function store(Request $request)
     {
-        $pasien = pasien::create($request->all());
-
-        $dataPasien = pasien::all();
-
-        if ($pasien){
-            $response["message"] = "Data Berhasil Di Simpan";
-            $response["data"] = compact('dataPasien');
+        $cekNoRm = pasien::where('no_rm', $request->no_rm)->first();
+        if ($cekNoRm == null) {
+            $pasien = pasien::create($request->all());
+            $dataPasien = pasien::all();
+            if ($pasien) {
+                $response["message"] = "Data Berhasil Di Simpan";
+                $response["data"] = compact('dataPasien');
+                return response()->json($response, 201);
+            } else {
+                $response["message"] = "Data Gagal Di Simpan";
+                $response["data"] = compact('dataPasien');
+                return response()->json($response, 501);
+            }
+        } else {
+            $response["message"] = "No RM sudah terdaftar !";
             return response()->json($response, 201);
-        }else{
-            $response["message"] = "Data Gagal Di Simpan";
-            $response["data"] = compact('dataPasien');
-            return response()->json($response, 501);
         }
 
 
@@ -87,23 +91,27 @@ class pasienController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updates = pasien::find($id)->update($request->all());
+        $cekNoRm = pasien::where('id', '<>', $id)->where('no_rm', $request->no_rm)->first();
+        if ($cekNoRm == null) {
+            $updates = pasien::find($id)->update($request->all());
 
-        $dataPasien = pasien::all();
+            $dataPasien = pasien::all();
 
-        if ($updates){
-            $response ["error"] = false;
-            $response ["message"] = "Data Berhasil Di Ubah !";
-            $response ["data"] = compact('dataPasien');
+            if ($updates) {
+                $response ["error"] = false;
+                $response ["message"] = "Data Berhasil Di Ubah !";
+                $response ["data"] = compact('dataPasien');
+                return response()->json($response, 200);
+            } else {
+                $response ["error"] = false;
+                $response ["message"] = "Data Gagal Di Ubah !";
+                $response ["data"] = compact('dataPasien');
+                return response()->json($response, 501);
+            }
+        } else {
+            $response ["message"] = "No RM Sudah Terdaftar Atas Nama Pasien Lain";
             return response()->json($response, 200);
-        }else{
-            $response ["error"] = false;
-            $response ["message"] = "Data Gagal Di Ubah !";
-            $response ["data"] = compact('dataPasien');
-            return response()->json($response, 501);
         }
-
-
     }
 
     /**

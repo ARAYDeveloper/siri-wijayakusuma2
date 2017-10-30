@@ -129,7 +129,7 @@
                                 {{--@if($tahun != null)--}}
                                     {{--@php($pasienawal = \App\riwayat::join('kamars as k', 'r.id_kamar', '=', 'k.id')->whereYear('r.created_at', ($tahun))->where('id_pelayanan', $layanan->id)->count())--}}
                                 {{--@else @php($pasienawal = '-') @endif;--}}
-                                {{--<td>{{$pasienawal}}</td>--}}
+                                {{--<td>{{$pasienawalphp}}</td>--}}
                             {{--</tr>--}}
                         {{--@endforeach--}}
                         </tbody>

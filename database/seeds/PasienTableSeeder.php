@@ -16,7 +16,6 @@ class PasienTableSeeder extends Seeder
         $datas =[
             [
                 'id'=>1,
-                'nik' => '3509919890201004',
                 'nama' => 'Angga Dwi Hariadi',
                 'tgl_lahir' => '1992-02-01',
                 'alamat' => 'Jalan Pattimura 9',
@@ -31,7 +30,6 @@ class PasienTableSeeder extends Seeder
             ],
             [
                 'id'=>2,
-                'nik' => '3509919890201005',
                 'nama' => 'Muhamat Abdul Rohim',
                 'tgl_lahir' => '1993-02-01',
                 'alamat' => 'Jalan Pattimura 9',

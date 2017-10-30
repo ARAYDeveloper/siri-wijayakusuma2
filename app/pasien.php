@@ -8,7 +8,7 @@ class pasien extends Model
 {
     protected $table = "pasiens";
     protected $primaryKey = "id";
-    protected $fillable = ['id','nik', 'nama', 'tgl_lahir', 'alamat', 'jenis_kelamin', 'agama', 'kewarganegaraan', 'status', 'no_rm','status_rawat'];
+    protected $fillable = ['id','nama', 'tgl_lahir', 'alamat', 'jenis_kelamin', 'agama', 'kewarganegaraan', 'status', 'no_rm','status_rawat'];
 
     public $timestamps = true;
 
