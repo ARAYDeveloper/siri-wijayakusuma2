@@ -31,7 +31,7 @@ class c_admin extends Controller
     public function laporan_internal($tahunnya = null)
     {
         $datatahun = riwayat::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
-        $datanya[] ='';
+        $datanya[] = '';
         if ($tahunnya != null) {
             for ($i = 0; $i < 12; $i++) {
                 $pasienawal = '';
@@ -137,14 +137,14 @@ class c_admin extends Controller
                 $datanya[$i]['mati_lebih_48'] = $mati_lebih_48;
             }
         }
-        return view('admin.laporan_internal', compact('datatahun','tahunnya','datanya'));
+        return view('admin.laporan_internal', compact('datatahun', 'tahunnya', 'datanya'));
     }
 
     public function laporan_external_rl12($tahunnya = null, $kamarid = null)
     {
         $datatahun = riwayat::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
         $datakamar = kamar::all();
-        $datanya[] ='';
+        $datanya[] = '';
         if ($tahunnya != null && $kamarid != null) {
             for ($i = 0; $i < 12; $i++) {
                 $pasienawal = 0;
@@ -154,7 +154,7 @@ class c_admin extends Controller
                 $jml_hari_perawatan = 0;
                 $jml_lama_dirawat = 0;
                 $tt = 0;
-                $periode =0;
+                $periode = 0;
                 $mati_kurang_48 = 0;
                 $mati_lebih_48 = 0;
 
@@ -251,14 +251,14 @@ class c_admin extends Controller
             }
         }
 
-        return view('admin.laporan_external_rl12', compact('datatahun','datakamar','tahunnya'));
+        return view('admin.laporan_external_rl12', compact('datatahun', 'datakamar', 'tahunnya'));
     }
 
     public function laporan_external_rl13($tahunnya = null)
     {
         $datatahun = kamar::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
         if ($tahunnya != null) {
-            $kamarnya = kamar::whereYear('created_at', $tahunnya)->get();
+            $kamarnya = kamar::all();
             $datapelayanan = jenisPelayanan::all();
 //            $datanya[] = '';
 //            for ($i = 0; $i < count($datapelayanan); $i++) {
@@ -273,19 +273,15 @@ class c_admin extends Controller
         return view('admin.laporan_external_rl13', compact('datatahun', 'tahunnya'));
     }
 
-    public function laporan_external_rl31($tahunnya = 2016)
+    public function laporan_external_rl31($tahunnya = null)
     {
-        $ceker = riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', 2016)->where('id_pelayanan',2)->get();
-
         $datatahun = riwayat::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
         if ($tahunnya != null) {
             $pelayanan = jenisPelayanan::all();
-            $riwayats = riwayat::all();
-            $pasien = App\pasien::all();
             $kamar = kamar::all();
-            return view('admin.laporan_external_rl31', compact('datatahun', 'pelayanan', 'tahunnya', 'pasien', 'riwayats', 'kamar'));
+            return view('admin.laporan_external_rl31', compact('datatahun', 'pelayanan', 'tahunnya', 'kamar'));
         }
-        return view('admin.laporan_external_rl31', compact('datatahun'));
+        return view('admin.laporan_external_rl31', compact('datatahun', 'tahunnya'));
     }
 
     public function laporan_external_rl4a()
@@ -314,9 +310,11 @@ class c_admin extends Controller
         return view('admin.cetak_laporan_external_rl13');
     }
 
-    public function cetak_laporan_external_rl31()
+    public function cetak_laporan_external_rl31($tahunnya = null)
     {
-        return view('admin.cetak_laporan_external_rl31');
+        $pelayanan = jenisPelayanan::all();
+        $kamar = kamar::all();
+        return view('admin.cetak_laporan_external_rl31', compact('pelayanan', 'tahunnya', 'kamar'));
     }
 
     public function cetak_laporan_external_rl4a()

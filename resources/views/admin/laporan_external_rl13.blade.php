@@ -101,7 +101,7 @@
                                     @php($okejumlahtt = \App\kamar::where('id_pelayanan', $pelayanan->id)->whereYear('created_at',$tahunnya)->sum('jumlah'))
                                         <td>{{ $okejumlahtt }}</td>
                                     @foreach($kamarnya as $kamarlapor2)
-                                        @php($cekkamar = \App\kamar::where('id_pelayanan', $pelayanan->id)->whereYear('created_at', $tahunnya)->where('id', $kamarlapor2->id)->first())
+                                        @php($cekkamar = \App\kamar::where('id_pelayanan', $pelayanan->id)->where('id', $kamarlapor2->id)->first())
                                         @if($cekkamar != null)
                                             @php($okejumlahkamar = \App\kamar::where('id_pelayanan', $pelayanan->id)->whereYear('created_at', $tahunnya)->where('id', $kamarlapor2->id)->sum('jumlah'))
                                             <td>{{ $okejumlahkamar }}</td>

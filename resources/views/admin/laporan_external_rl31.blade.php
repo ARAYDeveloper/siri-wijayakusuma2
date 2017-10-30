@@ -26,7 +26,7 @@
                             <div>
                                 <ol class="breadcrumb">
                                     <li>
-                                        <select class="form-control select2" style="width: 100%;">
+                                        <select id="tahunlapor" class="form-control select2" style="width: 100%;">
                                             <option selected="selected" value="">Tahun</option>
                                             @foreach($datatahun as $th)
                                                 <option value="{{$th->tahun}}">{{$th->tahun}}</option>
@@ -34,9 +34,10 @@
                                         </select>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn btn-primary">Tampil</button>
+                                        <button id="tampilkan" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
-                                    <li><a href="/adm_ctk_lap_ex_rl31" target="_blank" class="btn btn-default">Print</a>
+                                    <li><a href="/adm_ctk_lap_ex_rl31/{{$tahunnya}}" target="_blank"
+                                           class="btn btn-default">Print</a>
                                     </li>
                                 </ol>
                             </div>
@@ -50,7 +51,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-body">
-                            <table id="example2" data-toggle="table" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-bordered table-hover">
                                 <tbody>
                                 <tr>
                                     <td>Kode RS</td>
@@ -62,7 +63,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tahun</td>
-                                    <td>@if($tahunnya == null) - @else {{$tahunnya-1}} @endif</td>
+                                    <td>@if($tahunnya == null) - @else {{$tahunnya}} @endif</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -74,69 +75,188 @@
                     <!-- <small>advanced tables</small> -->
                 </h3>
                 <div class="box-body">
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th rowspan="2" data-field="number" data-sortable="true">No</th>
-                            <th rowspan="2" data-field="text" data-sortable="true">Jenis Pelayanan</th>
-                            <th rowspan="2" data-field="number" data-sortable="true">Pasien Awal Tahun</th>
-                            <th rowspan="2" data-field="number" data-sortable="true">Pasien Masuk</th>
-                            <th rowspan="2" data-field="number" data-sortable="true">Pasien Keluar Hidup</th>
-                            <th colspan="2" data-field="number" data-sortable="true">Pasien Keluar Mati</th>
-                            <th rowspan="2" data-field="number" data-sortable="true">Jumlah Lama Dirawat</th>
-                            <th rowspan="2" data-field="number" data-sortable="true">Pasien Akhir Tahun</th>
-                            <th rowspan="2" data-field="number" data-sortable="true">Jumlah Hari Perawatan</th>
-                            <th colspan="7" data-field="number" data-sortable="true">Perincian Tempat Tidur Kelas</th>
-                        </tr>
-                        <tr>
-                            <th data-field="number" data-sortable="true"> &lt 48 Jam</th>
-                            <th data-field="number" data-sortable="true"> &gt 48 Jam</th>
-                            <th data-field="number" data-sortable="true">VIP atas</th>
-                            <th data-field="number" data-sortable="true">VIP bawah</th>
-                            <th data-field="number" data-sortable="true">Mawar</th>
-                            <th data-field="number" data-sortable="true">Melati</th>
-                            <th data-field="number" data-sortable="true">Dahlia</th>
-                            <th data-field="number" data-sortable="true">Seruni</th>
-                            <th data-field="number" data-sortable="true">HCU</th>
-                        </tr>
-                        <tr>
-                            <th data-field="number" data-sortable="true">1</th>
-                            <th data-field="number" data-sortable="true">2</th>
-                            <th data-field="number" data-sortable="true">3</th>
-                            <th data-field="number" data-sortable="true">4</th>
-                            <th data-field="number" data-sortable="true">5</th>
-                            <th data-field="number" data-sortable="true">6</th>
-                            <th data-field="number" data-sortable="true">7</th>
-                            <th data-field="number" data-sortable="true">8</th>
-                            <th data-field="number" data-sortable="true">9</th>
-                            <th data-field="number" data-sortable="true">10</th>
-                            <th data-field="number" data-sortable="true">11</th>
-                            <th data-field="number" data-sortable="true">12</th>
-                            <th data-field="number" data-sortable="true">13</th>
-                            <th data-field="number" data-sortable="true">14</th>
-                            <th data-field="number" data-sortable="true">15</th>
-                            <th data-field="number" data-sortable="true">16</th>
-                            <th data-field="number" data-sortable="true">17</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{--@php($i = 0)--}}
-                        {{--@foreach($pelayanan as $layanan)--}}
-                            {{--@php($i++)--}}
-                            {{--<tr>--}}
-                                {{--<td>{{$i}}</td>--}}
-                                {{--<td>{{$layanan->jenis_pelayanan}}</td>--}}
-                                {{--@if($tahun != null)--}}
-                                    {{--@php($pasienawal = \App\riwayat::join('kamars as k', 'r.id_kamar', '=', 'k.id')->whereYear('r.created_at', ($tahun))->where('id_pelayanan', $layanan->id)->count())--}}
-                                {{--@else @php($pasienawal = '-') @endif;--}}
-                                {{--<td>{{$pasienawalphp}}</td>--}}
-                            {{--</tr>--}}
-                        {{--@endforeach--}}
-                        </tbody>
-                    </table>
+                    @if($tahunnya == null)
+                        <h3>
+                            <center>Silahkan Pilih Tahun Dulu</center>
+                        </h3>
+                    @else
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th rowspan="2" data-field="number" data-sortable="true">
+                                    <center>No</center>
+                                </th>
+                                <th rowspan="2" data-field="text" data-sortable="true">
+                                    <center>Jenis Pelayanan</center>
+                                </th>
+                                <th rowspan="2" data-field="number" data-sortable="true">
+                                    <center>Pasien Awal Tahun</center>
+                                </th>
+                                <th rowspan="2" data-field="number" data-sortable="true">
+                                    <center>Pasien Masuk</center>
+                                </th>
+                                <th rowspan="2" data-field="number" data-sortable="true">
+                                    <center>Pasien Keluar Hidup</center>
+                                </th>
+                                <th colspan="2" data-field="number" data-sortable="true">
+                                    <center>Pasien Keluar Mati</center>
+                                </th>
+                                <th rowspan="2" data-field="number" data-sortable="true">
+                                    <center>Jumlah Lama Dirawat</center>
+                                </th>
+                                <th rowspan="2" data-field="number" data-sortable="true">
+                                    <center>Pasien Akhir Tahun</center>
+                                </th>
+                                <th rowspan="2" data-field="number" data-sortable="true">
+                                    <center>Jumlah Hari Perawatan</center>
+                                </th>
+                                <th colspan="7" data-field="number" data-sortable="true">
+                                    <center>Perincian Tempat Tidur Kelas</center>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th data-field="number" data-sortable="true">
+                                    <center>&lt 48 Jam</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>&gt 48 Jam</center>
+                                </th>
+                                @foreach($kamar as $kamarlapor)
+                                    <th data-field="text" data-sortable="true">{{ $kamarlapor->nama_kamar }}</th>
+                                @endforeach
+                            </tr>
+                            <tr>
+                                <th data-field="number" data-sortable="true">
+                                    <center>1</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>2</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>3</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>4</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>5</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>6</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>7</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>8</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>9</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>10</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>11</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>12</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>13</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>14</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>15</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>16</center>
+                                </th>
+                                <th data-field="number" data-sortable="true">
+                                    <center>17</center>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @php($i = 0)
+                            @foreach($pelayanan as $layanan)
+                                @php($i++)
+                                <tr>
+                                    <td>{{$i}}</td>
+                                    <td>{{$layanan->jenis_pelayanan}}</td>
+                                    @if($tahunnya != null)
+                                        @php($pasienawal = \App\riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', ($tahunnya - 1))->where('id_pelayanan', $layanan->id)->where('status_keluar', 'Belum')->count())
+                                        @php($pasienmasuk = \App\riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', ($tahunnya))->where('id_pelayanan', $layanan->id)->count())
+                                        @php($keluarhidup = \App\riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', ($tahunnya))->where('id_pelayanan', $layanan->id)->where('status_keluar', 'Hidup')->count())
+                                        @php($kurangdari = \App\riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', ($tahunnya))->where('id_pelayanan', $layanan->id)->where('status_keluar', 'Meninggal')->where('kurang_48', '<>', 0)->count())())
+                                        @php($lebihdari = \App\riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', ($tahunnya))->where('id_pelayanan', $layanan->id)->where('status_keluar', 'Meninggal')->where('kurang_48', 0)->count())
+                                        @php($lamarawat = \App\riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', ($tahunnya))->where('id_pelayanan', $layanan->id)->sum('jumlah_lama_perawatan'))
+                                        @php($pasienakhir = \App\riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', ($tahunnya))->where('id_pelayanan', $layanan->id)->where('status_keluar', 'Belum')->count())
+                                        @php($harirawat = \App\riwayat::join('kamars as k', 'riwayats.id_kamar', '=', 'k.id')->whereYear('riwayats.created_at', ($tahunnya))->where('id_pelayanan', $layanan->id)->sum('jumlah_hari_perawatan'))
+                                        <td>
+                                            <center>{{$pasienawal}}</center>
+                                        </td>
+                                        <td>
+                                            <center>{{$pasienmasuk}}</center>
+                                        </td>
+                                        <td>
+                                            <center>{{$keluarhidup}}</center>
+                                        </td>
+                                        <td>
+                                            <center>{{$kurangdari}}</center>
+                                        </td>
+                                        <td>
+                                            <center>{{$lebihdari}}</center>
+                                        </td>
+                                        <td>
+                                            <center>{{$lamarawat}}</center>
+                                        </td>
+                                        <td>
+                                            <center>{{$pasienakhir}}</center>
+                                        </td>
+                                        <td>
+                                            <center>{{$harirawat}}</center>
+                                        </td>
+                                        @foreach($kamar as $kamarlapor2)
+                                            @php($okejumlahkamar = \App\kamar::where('id_pelayanan', $layanan->id)->where('id', $kamarlapor2->id)->sum('jumlah'))
+                                            @if($okejumlahkamar != 0)
+                                                <td>
+                                                    <center>{{ $okejumlahkamar }}</center>
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <center>0</center>
+                                                </td>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 </div><!-- /.box-body -->
             </div>
         </section>
     </div>
     <!-- </div> -->
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            $("#tampilkan").click(function () {
+                if ($('#tahunlapor').val() != '') {
+                    window.location.href = '/adm_lap_ex_rl31/' + $('#tahunlapor').val();
+                } else {
+                    alert('Pilih Tahun');
+                }
+            })
+        })
+    </script>
+@endpush

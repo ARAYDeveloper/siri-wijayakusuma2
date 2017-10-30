@@ -191,7 +191,7 @@
                     '<td>' + obj.pasien.no_rm + '</td>' +
                     '<td>' + obj.diagnosis.nama_penyakit + '</td>' +
                     '<td>' + obj.kamar.nama_kamar + '</td>' +
-                    '<td><button class="btn btn-sm btn-keluar" riwayat_id="' + obj.id + '">Keluarkan</button></td>' +
+                    '<td><button class="btn btn-sm btn-danger btn-keluar" riwayat_id="' + obj.id + '">Keluarkan</button></td>' +
                     '</tr>');
             });
 
@@ -228,6 +228,7 @@
                 data: value,
                 success: function (response) {
                     refreshTable(response);
+                    keluarkan();
                 }
             });
         }
