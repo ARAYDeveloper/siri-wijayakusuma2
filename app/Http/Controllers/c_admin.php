@@ -277,9 +277,17 @@ class c_admin extends Controller
         return view('admin.laporan_external_rl31', compact('datatahun', 'tahunnya'));
     }
 
-    public function laporan_external_rl4a()
+    public function laporan_external_rl4a($tahunnya = null)
     {
-        return view('admin.laporan_external_rl4a');
+        $datatahun = riwayat::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
+        $datadiagnosis = '';
+        if ($tahunnya != null) {
+            $cekdiagnosis = riwayat::join('diagnoses as d', 'riwayats.id_diagnosis', '=', 'd.id')->select('id_diagnosis',DB::raw('COUNT(riwayats.id_diagnosis) as jml'))->whereYear('tgl_keluar', $tahunnya)->groupBy('riwayats.id_diagnosis')->orderBy('jml', 'DESC')->get();
+            for ($i=0; $i<count($cekdiagnosis); $i++){
+                $datadiagnosis[$i] = diagnosis::where('id',$cekdiagnosis[$i]->id_diagnosis)->first();
+            }
+        }
+        return view('admin.laporan_external_rl4a', compact('datatahun','datadiagnosis','tahunnya'));
     }
 
     public function laporan_external_rl53($tahunnya = null)
@@ -550,12 +558,11 @@ class c_admin extends Controller
             }
         }
 
-        return view('admin.cetak_laporan_external_rl4a', compact('datatahun','datadiagnosis'));
+        return view('admin.cetak_laporan_external_rl4a', compact('datatahun','datadiagnosis','tahunnya'));
     }
 
     public function cetak_laporan_external_rl53($tahunnya = null)
     {
-        $datatahun = riwayat::select(DB::raw('YEAR(created_at) as tahun'))->distinct('tahun')->get();
         $datadiagnosis = '';
         if ($tahunnya != null) {
             $cekdiagnosis = riwayat::join('diagnoses as d', 'riwayats.id_diagnosis', '=', 'd.id')->select('id_diagnosis',DB::raw('COUNT(riwayats.id_diagnosis) as jml'))->whereYear('tgl_keluar', $tahunnya)->groupBy('riwayats.id_diagnosis')->orderBy('jml', 'DESC')->limit(10)->get();
@@ -563,7 +570,7 @@ class c_admin extends Controller
                 $datadiagnosis[$i] = diagnosis::where('id',$cekdiagnosis[$i]->id_diagnosis)->first();
             }
         }
-        return view('admin.cetak_laporan_external_rl53', compact('datatahun','datadiagnosis','tahunnya'));
+        return view('admin.cetak_laporan_external_rl53', compact('datadiagnosis','tahunnya'));
     }
 
     // Transaksi

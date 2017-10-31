@@ -32,25 +32,18 @@
             <div class="row">
               <div class="col-xs-12">
                 <h2 class="page-header">
-                  SIRI.
-                  <small class="pull-right"> Tanggal: 12/12/2016</small>
+                  SIRI | Laporan Ext RL 4a
+                  <small class="pull-right"> Dicetak Tanggal: {{ date('d/m/Y') }}</small>
                 </h2>
               </div><!-- /.col -->
             </div>
             <!-- info row -->
             <div class="row invoice-info">
               <div class="col-sm-4 invoice-col">
-                Kepada:
-                <address>
-                  <strong>Alam Ardianto</strong><br>
-                  Jalan Melati I No. 79<br>
-                  Jember<br>
-                  Telepon: 089608960896<br>
-                  Email: alamardianto@gmail.com
-                </address>
+                Tahun: {{ $tahunnya }}
               </div><!-- /.col -->
               <div class="col-sm-4 invoice-col">
-                <<b>Invoice #007612</b><br>
+                  <b><center>RS. Wijaya Kusuma</center></b>
                 <br>
                 <!-- <b>No. Pesanan:</b> PS0029<br> -->
                 <!-- <b>Payment Due:</b> 2/22/2014<br> -->
@@ -62,7 +55,7 @@
             <br><br>
             <div class="row">
               <div class="col-xs-12 table-responsive">
-                <table class="table table-striped">
+                <table class="table table-bordered table-responsive">
                   <thead>
                    <tr>
                     <th rowspan="3">No. Urut</th>
@@ -137,18 +130,38 @@
                  </tr>
                </thead>
                <tbody>
-                <tr>
-                 <td>1</td>
-                 <td>001</td>
-                 <td>A00</td>
-                 <td>Kolera</td>
-               </tr>
-               <tr>
-                 <td>2</td>
-                 <td>002</td>
-                 <td>A01</td>
-                 <td>Demam Tifoid dan Paratifoid</td>
-               </tr>
+               @php($i=0)
+               @foreach($datadiagnosis as $diagnosis)
+                   @php($i++)
+                   <tr>
+                       <td>{{ $i }}</td>
+                       <td>{{ $diagnosis->kode_dtd }}</td>
+                       <td>{{ $diagnosis->kode_icd }}</td>
+                       <td>{{ $diagnosis->nama_penyakit }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>','0')->where('umur','<=','0.01643836')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>','0')->where('umur','<=','0.01643836')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>','0.01643836')->where('umur','<=','0.07671233')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>','0.01643836')->where('umur','<=','0.07671233')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>','0.07671233')->where('umur','<=','1')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>','0.07671233')->where('umur','<=','1')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>','1')->where('umur','<=','4')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>','1')->where('umur','<=','4')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','5')->where('umur','<=','14')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','5')->where('umur','<=','14')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','15')->where('umur','<=','24')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','15')->where('umur','<=','24')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','25')->where('umur','<=','44')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','25')->where('umur','<=','44')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','45')->where('umur','<=','64')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','45')->where('umur','<=','64')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','65')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','65')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                       <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('status_keluar','Meninggal')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                   </tr>
+               @endforeach
              </tbody>
            </table>
          </div><!-- /.col -->

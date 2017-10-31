@@ -29,14 +29,19 @@
                                         <select id="tahunlapor" class="form-control select2" style="width: 100%;">
                                             <option value="" selected="selected">Tahun</option>
                                             @foreach($datatahun as $tahun)
-                                                <option value="{{ $tahun->$tahun }}">{{ $tahun->$tahun }}</option>
+                                                <option value="{{ $tahun->tahun }}">{{ $tahun->tahun }}</option>
                                             @endforeach
                                         </select>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn btn-primary">Tampil</button>
+                                        <button id="tampilkan" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
-                                    <li><a href="/adm_ctk_lap_ex_rl4a" target="_blank" class="btn btn-default">Print</a>
+                                    <li>
+                                        @if($tahunnya != null)
+                                            <a href="/adm_ctk_lap_ex_rl4a/{{ $tahunnya }}" target="_blank" class="btn btn-default">Print</a>
+                                        @else
+                                            <a onclick="alert('Pilih Tahun dan Tampil Dulu')" target="_blank" class="btn btn-default">Print</a>
+                                        @endif
                                     </li>
                                 </ol>
                             </div>
@@ -62,7 +67,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tahun</td>
-                                    <td>2017</td>
+                                    <td>@if($tahunnya == null) - @else {{$tahunnya}} @endif</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -159,7 +164,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @php($i++)
+                        @php($i=0)
                         @foreach($datadiagnosis as $diagnosis)
                             @php($i++)
                             <tr>
@@ -167,7 +172,28 @@
                                 <td>{{ $diagnosis->kode_dtd }}</td>
                                 <td>{{ $diagnosis->kode_icd }}</td>
                                 <td>{{ $diagnosis->nama_penyakit }}</td>
-                                <td></td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>','0')->where('umur','<=','0.01643836')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>','0')->where('umur','<=','0.01643836')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>','0.01643836')->where('umur','<=','0.07671233')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>','0.01643836')->where('umur','<=','0.07671233')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>','0.07671233')->where('umur','<=','1')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>','0.07671233')->where('umur','<=','1')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>','1')->where('umur','<=','4')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>','1')->where('umur','<=','4')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','5')->where('umur','<=','14')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','5')->where('umur','<=','14')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','15')->where('umur','<=','24')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','15')->where('umur','<=','24')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','25')->where('umur','<=','44')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','25')->where('umur','<=','44')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','45')->where('umur','<=','64')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','45')->where('umur','<=','64')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('umur','>=','65')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('umur','>=','65')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Laki-Laki')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('p.jenis_kelamin','Perempuan')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('id_diagnosis', $diagnosis->id)->count() }}</td>
+                                <td>{{ \App\riwayat::join('pasiens as p','riwayats.id_pasien', '=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar', $tahunnya)->where('status_keluar','Meninggal')->where('id_diagnosis', $diagnosis->id)->count() }}</td>
                             </tr>
                         @endforeach
                         </tbody>
