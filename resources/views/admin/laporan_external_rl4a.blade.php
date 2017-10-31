@@ -26,14 +26,11 @@
                             <div>
                                 <ol class="breadcrumb">
                                     <li>
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option selected="selected">Tahun</option>
-                                            <option>2017</option>
-                                            <option>2018</option>
-                                            <option>2019</option>
-                                            <option>2020</option>
-                                            <option>2021</option>
-                                            <option>2022</option>
+                                        <select id="tahunlapor" class="form-control select2" style="width: 100%;">
+                                            <option value="" selected="selected">Tahun</option>
+                                            @foreach($datatahun as $tahun)
+                                                <option value="{{ $tahun->$tahun }}">{{ $tahun->$tahun }}</option>
+                                            @endforeach
                                         </select>
                                     </li>
                                     <li>
@@ -53,7 +50,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-body">
-                            <table id="example2" data-toggle="table" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-bordered table-hover">
                                 <tbody>
                                 <tr>
                                     <td>Kode RS</td>
@@ -77,7 +74,10 @@
                     <!-- <small>advanced tables</small> -->
                 </h3>
                 <div class="box-body">
-                    <table id="example2" class="table table-bordered table-hover">
+                    @if($tahunnya == null)
+                        <h3><center>Silahkan Pilih Tahun Dulu</center></h3>
+                    @else
+                        <table id="example2" class="table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th rowspan="3" data-field="text" data-sortable="true">No. Urut</th>
@@ -159,23 +159,37 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>001</td>
-                            <td>A00</td>
-                            <td>Kolera</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>002</td>
-                            <td>A01</td>
-                            <td>Demam Tifoid dan Paratifoid</td>
-                        </tr>
+                        @php($i++)
+                        @foreach($datadiagnosis as $diagnosis)
+                            @php($i++)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $diagnosis->kode_dtd }}</td>
+                                <td>{{ $diagnosis->kode_icd }}</td>
+                                <td>{{ $diagnosis->nama_penyakit }}</td>
+                                <td></td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
+                    @endif
                 </div><!-- /.box-body -->
             </div>
         </section>
     </div>
             <!-- </div> -->
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+
+            $('#tampilkan').click(function () {
+                if ($('#tahunlapor').val() != ''){
+                    window.location.href = '/adm_lap_ex_rl4a/' + $('#tahunlapor').val();
+                }else{
+                    alert('Pilih Tahun');
+                }
+            })
+        })
+    </script>
+@endpush

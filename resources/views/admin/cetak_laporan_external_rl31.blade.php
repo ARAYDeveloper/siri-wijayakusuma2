@@ -32,7 +32,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <h2 class="page-header">
-                    SIRI.
+                    SIRI | Laporan Ext RL 3.1.
                     @php($date = \Carbon\Carbon::now('Asia/Jakarta')->toDateTimeString())
                     <small class="pull-right">{{$date}}</small>
                 </h2>
@@ -40,14 +40,19 @@
         </div>
         <!-- info row -->
         <div class="row invoice-info">
-
+            <div class="col-sm-4 invoice-col">
+                Tahun: {{ $tahunnya }}
+            </div><!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                <b><center>RS. Wijaya Kusuma</center></b>
+                <br>
         </div><!-- /.row -->
 
         <!-- Table row -->
         <br><br>
         <div class="row">
             <div class="col-xs-12 table-responsive">
-                <table class="table table-striped">
+                <table class="table table-bordered table-responsive">
                     <thead>
                     <tr>
                         <th rowspan="2" data-field="number" data-sortable="true">

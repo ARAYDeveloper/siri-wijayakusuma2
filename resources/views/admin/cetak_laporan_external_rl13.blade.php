@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>SIRI | Invoice</title>
+  <title>SIRI | Laporan Ext RL 1.3</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
@@ -32,25 +32,18 @@
             <div class="row">
               <div class="col-xs-12">
                 <h2 class="page-header">
-                  SIRI.
-                  <small class="pull-right"> Tanggal: 12/12/2016</small>
+                  SIRI | Laporan Ext RL 1.3
+                  <small class="pull-right"> Dicetak Tanggal: {{ date('d/m/Y') }}</small>
                 </h2>
               </div><!-- /.col -->
             </div>
             <!-- info row -->
             <div class="row invoice-info">
               <div class="col-sm-4 invoice-col">
-                Kepada:
-                <address>
-                  <strong>Alam Ardianto</strong><br>
-                  Jalan Melati I No. 79<br>
-                  Jember<br>
-                  Telepon: 089608960896<br>
-                  Email: alamardianto@gmail.com
-                </address>
+                Tahun: {{ $tahunnya }}
               </div><!-- /.col -->
               <div class="col-sm-4 invoice-col">
-                <<b>Invoice #007612</b><br>
+                <b><center>RS. Wijaya Kusuma</center></b>
                 <br>
                 <!-- <b>No. Pesanan:</b> PS0029<br> -->
                 <!-- <b>Payment Due:</b> 2/22/2014<br> -->
@@ -62,49 +55,40 @@
             <br><br>
             <div class="row">
               <div class="col-xs-12 table-responsive">
-                <table class="table table-striped">
+                <table class="table table-bordered table-responsive">
                   <thead>
                    <tr>
                      <th rowspan="2">No</th>
                      <th rowspan="2">Jenis Pelayanan</th>
                      <th rowspan="2">Jumlah TT</th>
-                     <th colspan="7">Perincian Tempat Tidur Kelas</th>
+                       <th colspan="7"><center>Perincian Tempat Tidur Kelas</center></th>
                    </tr>
                    <tr>
-                     <th>VIP atas</th>
-                     <th>VIP bawah</th>
-                     <th>Mawar</th>
-                     <th>Melati</th>
-                     <th>Dahlia</th>
-                     <th>Seruni</th>
-                     <th>HCU</th>
-                   </tr>
-                   <tr>
-                     <th>1</th>
-                     <th>2</th>
-                     <th>3</th>
-                     <th>4</th>
-                     <th>5</th>
-                     <th>6</th>
-                     <th>7</th>
-                     <th>8</th>
-                     <th>9</th>
-                     <th>10</th>
+                       @foreach($kamarnya as $kamarlapor)
+                           <th>{{ $kamarlapor->nama_kamar }}</th>
+                       @endforeach
                    </tr>
                  </thead>
                  <tbody>
-                  <tr>
-                   <td>1</td>
-                   <td>Kesehatan Anak</td>
-                 </tr>
-                 <tr>
-                   <td>2</td>
-                   <td>Penyakit Dalam</td>
-                 </tr>
-                 <tr>
-                   <td>3</td>
-                   <td>Obstetri</td>
-                 </tr>
+                 @php($i=0)
+                 @foreach($datapelayanan as $pelayanan)
+                     @php($i++)
+                     <tr>
+                         <td>{{ $i }}</td>
+                         <td>{{ $pelayanan->jenis_pelayanan }}</td>
+                         @php($okejumlahtt = \App\kamar::where('id_pelayanan', $pelayanan->id)->whereYear('created_at',$tahunnya)->sum('jumlah'))
+                         <td>{{ $okejumlahtt }}</td>
+                         @foreach($kamarnya as $kamarlapor2)
+                             @php($cekkamar = \App\kamar::where('id_pelayanan', $pelayanan->id)->where('id', $kamarlapor2->id)->first())
+                             @if($cekkamar != null)
+                                 @php($okejumlahkamar = \App\kamar::where('id_pelayanan', $pelayanan->id)->whereYear('created_at', $tahunnya)->where('id', $kamarlapor2->id)->sum('jumlah'))
+                                 <td>{{ $okejumlahkamar }}</td>
+                             @else
+                                 <td>0</td>
+                             @endif
+                         @endforeach
+                     </tr>
+                 @endforeach
                </tbody>
              </table>
            </div><!-- /.col -->

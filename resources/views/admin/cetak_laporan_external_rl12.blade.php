@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SIRI | Invoice</title>
+    <title>SIRI | Laporan Ext RL 1.2</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
@@ -32,29 +32,20 @@
         <div class="row">
           <div class="col-xs-12">
             <h2 class="page-header">
-              SIRI.
-              <small class="pull-right"> Tanggal: 12/12/2016</small>
+              SIRI | Laporan Ext RL 1.2
+              <small class="pull-right"> Dicetak Tanggal: {{ date('d/m/Y') }}</small>
             </h2>
           </div><!-- /.col -->
         </div>
         <!-- info row -->
         <div class="row invoice-info">
           <div class="col-sm-4 invoice-col">
-            Kepada:
-            <address>
-              <strong>Alam Ardianto</strong><br>
-                Jalan Melati I No. 79<br>
-                Jember<br>
-                Telepon: 089608960896<br>
-                Email: alamardianto@gmail.com
-            </address>
+            Tahun: {{ $tahunnya }} <br>
+            Kamar : {{ \App\kamar::where('id',$kamarid)->first()->nama_kamar }}
           </div><!-- /.col -->
           <div class="col-sm-4 invoice-col">
-            <<b>Invoice #007612</b><br>
+            <b><center>RS. Wijaya Kusuma</center></b>
               <br>
-              <!-- <b>No. Pesanan:</b> PS0029<br> -->
-              <!-- <b>Payment Due:</b> 2/22/2014<br> -->
-              <!-- <b>ID Akun:</b> 968-34567 -->
           </div><!-- /.col -->
         </div><!-- /.row -->
 
@@ -62,7 +53,7 @@
         <br><br>
         <div class="row">
           <div class="col-xs-12 table-responsive">
-            <table class="table table-striped">
+            <table class="table table-bordered table-responsive">
               <thead>
                <tr>
                   <th>Tahun</th>
@@ -86,9 +77,16 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                    <td>Januari</td>
-                </tr>
+              <tbody>
+              <td>{{ $tahunnya }}</td>
+              <td>{{ $datanya['bor'] }}</td>
+              <td>{{ $datanya['los'] }}</td>
+              <td>{{ $datanya['toi'] }}</td>
+              <td>{{ $datanya['bto'] }}</td>
+              <td>{{ $datanya['ndr'] }}</td>
+              <td>{{ $datanya['gdr'] }}</td>
+              <td>{{ $datanya['kunjungan'] }}</td>
+              </tbody>
               </tbody>
             </table>
           </div><!-- /.col -->

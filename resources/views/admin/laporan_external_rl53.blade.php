@@ -26,20 +26,22 @@
                             <div>
                                 <ol class="breadcrumb">
                                     <li>
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option selected="selected">Tahun</option>
-                                            <option>2017</option>
-                                            <option>2018</option>
-                                            <option>2019</option>
-                                            <option>2020</option>
-                                            <option>2021</option>
-                                            <option>2022</option>
+                                        <select id="tahunlapor" class="form-control select2" style="width: 100%;">
+                                            <option value="" selected="selected">Tahun</option>
+                                            @foreach($datatahun as $tahun)
+                                                <option value="{{ $tahun->tahun }}">{{ $tahun->tahun }}</option>
+                                            @endforeach
                                         </select>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn btn-primary">Tampil</button>
+                                        <button id="tampilkan" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
-                                    <li><a href="/adm_ctk_lap_ex_rl53" target="_blank" class="btn btn-default">Print</a>
+                                    <li>
+                                        @if($tahunnya != null)
+                                            <a href="/adm_ctk_lap_ex_rl53/{{$tahunnya}}" target="_blank" class="btn btn-default">Print</a>
+                                        @else
+                                            <a onclick="alert('Pilih Tahun dulu dan Tampil')" target="_blank" class="btn btn-default">Print</a>
+                                        @endif
                                     </li>
                                 </ol>
                             </div>
@@ -53,7 +55,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-body">
-                            <table id="example2" data-toggle="table" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-bordered table-hover">
                                 <tbody>
                                 <tr>
                                     <td>Kode RS</td>
@@ -65,7 +67,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tahun</td>
-                                    <td>2017</td>
+                                    <td>@if($tahunnya == null) - @else {{$tahunnya}} @endif</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -77,7 +79,10 @@
                     <!-- <small>advanced tables</small> -->
                 </h3>
                 <div class="box-body">
-                    <table id="example2"class="table table-bordered table-hover">
+                    @if($tahunnya == null)
+                        <h3><center>Silahkan Pilih Tahun Dulu</center></h3>
+                    @else
+                        <table id="example2" class="table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th rowspan="2" data-field="text" data-sortable="true">No Urut</th>
@@ -109,21 +114,40 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>A00.0</td>
-                            <td>Cholera due to Vibrio cholerae 01, biovar cholerae</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>A01.0</td>
-                            <td>Typhoid fever</td>
-                        </tr>
+                        @php($i=0)
+                        @foreach($datadiagnosis as $diagnosis)
+                            @php($i++)
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $diagnosis->kode_icd }}</td>
+                                <td>{{ $diagnosis->deskripsi }}</td>
+                                <td>{{ $datakeluarhiduplaki = \App\riwayat::join('pasiens as p','riwayats.id_pasien','=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar',$tahunnya)->where('id_diagnosis',$diagnosis->id)->where('status_keluar','Hidup')->where('p.jenis_kelamin','Laki-Laki')->count() }}</td>
+                                <td>{{ $datakeluarhidupperempuan = \App\riwayat::join('pasiens as p','riwayats.id_pasien','=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar',$tahunnya)->where('id_diagnosis',$diagnosis->id)->where('status_keluar','Hidup')->where('p.jenis_kelamin','Perempuan')->count() }}</td>
+                                <td>{{ $datakeluarmatilaki = \App\riwayat::join('pasiens as p','riwayats.id_pasien','=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar',$tahunnya)->where('id_diagnosis',$diagnosis->id)->where('status_keluar','Meninggal')->where('p.jenis_kelamin','Laki-Laki')->count() }}</td>
+                                <td>{{ $datakeluarmatiperempuan = \App\riwayat::join('pasiens as p','riwayats.id_pasien','=','p.id')->whereNotNull('tgl_keluar')->whereYear('tgl_keluar',$tahunnya)->where('id_diagnosis',$diagnosis->id)->where('status_keluar','Meninggal')->where('p.jenis_kelamin','Perempuan')->count() }}</td>
+                                <td>{{ $datakeluarhiduplaki + $datakeluarhidupperempuan + $datakeluarmatilaki + $datakeluarmatiperempuan }}</td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
+                    @endif
                 </div><!-- /.box-body -->
     </div>
     </section>
     </div>
     <!-- </div> -->
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+
+            $('#tampilkan').click(function () {
+                if ($('#tahunlapor').val() != ''){
+                    window.location.href = '/adm_lap_ex_rl53/' + $('#tahunlapor').val();
+                }else{
+                    alert('Pilih Tahun');
+                }
+            })
+        })
+    </script>
+@endpush

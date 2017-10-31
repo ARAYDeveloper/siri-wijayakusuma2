@@ -40,18 +40,17 @@ Route::group(["middleware" => "auth"], function (){
     Route::get('/adm_lap_ex', 'c_admin@laporan_external')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl12/{tahunnya?}/{kamarid?}', 'c_admin@laporan_external_rl12')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl13/{tahunnya?}', 'c_admin@laporan_external_rl13')->middleware('rule:direktur|petugas');
-    Route::get('/adm_lap_ex_rl31', 'c_admin@laporan_external_rl31')->middleware('rule:direktur|petugas');
     Route::get('/adm_lap_ex_rl31/{tahunnya?}', 'c_admin@laporan_external_rl31')->middleware('rule:direktur|petugas');
-    Route::get('/adm_lap_ex_rl4a', 'c_admin@laporan_external_rl4a')->middleware('rule:direktur|petugas');
-    Route::get('/adm_lap_ex_rl53', 'c_admin@laporan_external_rl53')->middleware('rule:direktur|petugas');
+    Route::get('/adm_lap_ex_rl4a/{tahunnya?}', 'c_admin@laporan_external_rl4a')->middleware('rule:direktur|petugas');
+    Route::get('/adm_lap_ex_rl53/{tahunnya?}', 'c_admin@laporan_external_rl53')->middleware('rule:direktur|petugas');
 
 // Cetak Laporan
-    Route::get('/adm_ctk_lap_in', 'c_admin@cetak_internal');
-    Route::get('/adm_ctk_lap_ex_rl12', 'c_admin@cetak_laporan_external_rl12');
-    Route::get('/adm_ctk_lap_ex_rl13', 'c_admin@cetak_laporan_external_rl13');
+    Route::get('/adm_ctk_lap_in/{tahunnya?}', 'c_admin@cetak_internal');
+    Route::get('/adm_ctk_lap_ex_rl12/{tahunnya?}/{kamarid?}', 'c_admin@cetak_laporan_external_rl12');
+    Route::get('/adm_ctk_lap_ex_rl13/{tahunnya?}', 'c_admin@cetak_laporan_external_rl13');
     Route::get('/adm_ctk_lap_ex_rl31/{tahunnya?}', 'c_admin@cetak_laporan_external_rl31');
-    Route::get('/adm_ctk_lap_ex_rl4a', 'c_admin@cetak_laporan_external_rl4a');
-    Route::get('/adm_ctk_lap_ex_rl53', 'c_admin@cetak_laporan_external_rl53');
+    Route::get('/adm_ctk_lap_ex_rl4a/{tahunnya?}', 'c_admin@cetak_laporan_external_rl4a');
+    Route::get('/adm_ctk_lap_ex_rl53/{tahunnya?}', 'c_admin@cetak_laporan_external_rl53');
 
 // Transaksi
     Route::get('/adm_t_pas_masuk', 'c_admin@t_pasien_masuk');

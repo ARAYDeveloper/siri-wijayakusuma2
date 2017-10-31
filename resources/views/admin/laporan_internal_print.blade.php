@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SIRI | Invoice</title>
+    <title>SIRI | Laporan Internal</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
@@ -32,29 +32,19 @@
         <div class="row">
           <div class="col-xs-12">
             <h2 class="page-header">
-              SIRI.
-              <small class="pull-right"> Tanggal: 12/12/2016</small>
+              SIRI | Laporan Internal
+              <small class="pull-right"> Dicetak Tanggal: {{ date('d/m/Y') }}</small>
             </h2>
           </div><!-- /.col -->
         </div>
         <!-- info row -->
         <div class="row invoice-info">
           <div class="col-sm-4 invoice-col">
-            Kepada:
-            <address>
-              <strong>Alam Ardianto</strong><br>
-                Jalan Melati I No. 79<br>
-                Jember<br>
-                Telepon: 089608960896<br>
-                Email: alamardianto@gmail.com
-            </address>
+            Tahun: {{ $tahunnya }}
           </div><!-- /.col -->
           <div class="col-sm-4 invoice-col">
-            <<b>Invoice #007612</b><br>
+            <b><center>RS. Wijaya Kusuma</center></b>
               <br>
-              <!-- <b>No. Pesanan:</b> PS0029<br> -->
-              <!-- <b>Payment Due:</b> 2/22/2014<br> -->
-              <!-- <b>ID Akun:</b> 968-34567 -->
           </div><!-- /.col -->
         </div><!-- /.row -->
 
@@ -62,7 +52,7 @@
         <br><br>
         <div class="row">
           <div class="col-xs-12 table-responsive">
-            <table class="table table-striped">
+            <table class="table table-bordered table-responsive">
               <thead>
                <tr>
                   <th>Bulan</th>
@@ -84,57 +74,39 @@
                 </tr>
               </thead>
               <tbody>
+              @for($i=0; $i<count($datanya); $i++)
                 <tr>
-                    <td>Januari</td>
-                    <!-- <td>29</td>
-                    <td>2</td>
-                    <td>212</td>
-                    <td>224</td>
-                    <td>225</td>
-                    <td>212</td>
-                    <td>122</td>
-                    <td>522</td>
-                    <td>222</td>
-                    <td>922</td>
-                    <td>212</td>
-                    <td>022</td>
-                    <td>1</td>
+                  <td>{{ $datanya[$i]["bulan"] }}</td>
+                  <td>{{ $datanya[$i]["pasienawal"] }}</td>
+                  <td>{{ $datanya[$i]["pasienmasuk"] }}</td>
+                  <td>{{ $datanya[$i]["pasienkeluar"] }}</td>
+                  <td>{{ $datanya[$i]["sisapasien"] }}</td>
+                  <td>{{ $datanya[$i]["jml_hari_perawatan"] }}</td>
+                  <td>{{ $datanya[$i]["jml_lama_dirawat"] }}</td>
+                  <td>{{ $datanya[$i]["tt"] }}</td>
+                  <td>{{ $datanya[$i]["periode"] }}</td>
+                  <td>{{ round($datanya[$i]["jml_hari_perawatan"]/($datanya[$i]["tt"] * $datanya[$i]["periode"]) * 100, 2) }}</td>
+                  @if($datanya[$i]["pasienkeluar"] != 0)
+                    <td>{{ round($datanya[$i]["jml_lama_dirawat"]/$datanya[$i]["pasienkeluar"],2) }}</td>
+                  @else
                     <td>0</td>
-                    <td>10</td> -->
-                  </tr>
-                  <tr>
-                    <td>Februari</td>
-                  </tr>
-                  <tr>
-                    <td>Maret</td>
-                  </tr>
-                  <tr>
-                    <td>April</td>
-                  </tr>
-                  <tr>
-                    <td>Mei</td>
-                  </tr>
-                  <tr>
-                    <td>Juni</td>
-                  </tr>
-                  <tr>
-                    <td>Juli</td>
-                  </tr>
-                  <tr>
-                    <td>Agustus</td>
-                  </tr>
-                  <tr>
-                    <td>September</td>
-                  </tr>
-                  <tr>
-                    <td>Oktober</td>
-                  </tr>
-                  <tr>
-                    <td>November</td>
-                  </tr>
-                  <tr>
-                    <td>Desember</td>
-                  </tr>
+                  @endif
+                  @if($datanya[$i]["tt"] != 0)
+                    <td>{{ round($datanya[$i]["pasienkeluar"]/$datanya[$i]["tt"],2) }}</td>
+                  @else
+                    <td>0</td>
+                  @endif
+                  <td>{{ $datanya[$i]["mati_kurang_48"] }}</td>
+                  <td>{{ $datanya[$i]["mati_lebih_48"] }}</td>
+                  @if($datanya[$i]["pasienkeluar"] != 0)
+                    <td>{{ round($datanya[$i]["mati_lebih_48"]/$datanya[$i]["pasienkeluar"] * 1000,2) }}</td>
+                    <td>{{ round($datanya[$i]["mati_kurang_48"]+$datanya[$i]["mati_lebih_48"]/$datanya[$i]["pasienkeluar"] * 1000,2) }}</td>
+                  @else
+                    <td>0</td>
+                    <td>0</td>
+                  @endif
+                </tr>
+              @endfor
               </tbody>
             </table>
           </div><!-- /.col -->

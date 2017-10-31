@@ -36,8 +36,14 @@
                                     <li>
                                         <button id="tampilkan" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
-                                    <li><a href="/adm_ctk_lap_ex_rl31/{{$tahunnya}}" target="_blank"
-                                           class="btn btn-default">Print</a>
+                                    <li>
+                                        @if($tahunnya != null)
+                                            <a href="/adm_ctk_lap_ex_rl31/{{$tahunnya}}" target="_blank"
+                                               class="btn btn-default">Print</a>
+                                        @else
+                                            <a onclick="alert('Pilih Tahun dulu dan Tampil')" target="_blank"
+                                               class="btn btn-default">Print</a>
+                                        @endif
                                     </li>
                                 </ol>
                             </div>

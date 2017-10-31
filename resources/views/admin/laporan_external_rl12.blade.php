@@ -44,7 +44,12 @@
                                     <li>
                                         <button id="tampilkan" type="button" class="btn btn-primary">Tampil</button>
                                     </li>
-                                    <li><a href="/adm_ctk_lap_ex_rl12" target="_blank" class="btn btn-default">Print</a>
+                                    <li>
+                                        @if($tahunnya != null && $kamarid != null)
+                                            <a href="/adm_ctk_lap_ex_rl12/{{$tahunnya}}/{{$kamarid}}" target="_blank" class="btn btn-default">Print</a>
+                                        @else
+                                            <a onclick="alert('Pilih Tahun dan Kamar Lalu Tampil')" target="_blank" class="btn btn-default">Print</a>
+                                        @endif
                                     </li>
                                 </ol>
                             </div>
@@ -135,7 +140,7 @@
                     console.log('halo');
                     window.location.href = '/adm_lap_ex_rl12/' + $('#tahunlapor').val() + '/' + $('#kamarlapor').val();
                 }else{
-                    alert('Tahun atau kamar belum dipilij');
+                    alert('Tahun atau kamar belum dipilih');
                 }
             })
         })

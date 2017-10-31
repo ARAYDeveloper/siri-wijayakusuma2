@@ -216,7 +216,7 @@ class riwayatController extends Controller
             );
             $response["message"] = "Data Berhasil Di Simpan";
             $response["data"] = compact('dataRiwayats', 'dataRiwayatKeluar');
-            return response()->json($response, 201);
+            return response()->json($response, 200);
         } else {
             $response["message"] = "Data Gagal Di Simpan";
             $response["data"] = compact('dataRiwayats', 'dataRiwayatKeluar');
