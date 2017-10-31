@@ -8,7 +8,7 @@ class riwayat extends Model
 {
     protected $table = "riwayats";
     protected $primaryKey = "id";
-    protected $fillable = ['id', 'id_pasien', 'id_kamar', 'id_pembayaran', 'id_diagnosis', 'tgl_masuk', 'tgl_keluar', 'pindah',
+    protected $fillable = ['id', 'id_pasien', 'id_kamar', 'id_pembayaran', 'id_diagnosis', 'tgl_masuk', 'tgl_keluar', 'umur','pindah',
         'pulang_paksa', 'jumlah_hari_perawatan', 'jumlah_lama_perawatan', 'kurang_48','lebih_48','status_keluar', 'id_rumah_sakit_rujuks','created_at', 'updated_at'];
     public $timestamps = true;
 

@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(KamarTableSeeder::class);
         $this->call(DiagnosisTableSeeder::class);
         $this->call(PasienTableSeeder::class);
-        $this->call(RiwayatsTableSeeder::class);
+//        $this->call(RiwayatsTableSeeder::class);
     }
 }

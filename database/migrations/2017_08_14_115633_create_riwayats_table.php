@@ -21,6 +21,7 @@ class CreateRiwayatsTable extends Migration
             $table->integer('id_diagnosis')->unsigned();
             $table->dateTime('tgl_masuk');
             $table->dateTime('tgl_keluar')->nullable();
+            $table->double('umur');
             $table->enum('pindah', ['ya', 'tidak']);
             $table->enum('pulang_paksa', ['Ya', 'Tidak']);
             $table->integer('jumlah_hari_perawatan')->nullable();

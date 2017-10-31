@@ -8,6 +8,7 @@ use App\kamar;
 use App\pasien;
 use App\riwayat;
 use App\RumahSakitRujuk;
+use Faker\Provider\DateTime;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -50,6 +51,7 @@ class riwayatController extends Controller
         $hariRawat = 0;
         $lamaRawat = 0;
         $lamaJam = 0;
+        $umur = 0;
         if ($request->tgl_keluar != '') {
             $convert_keluar = new \DateTime($request->tgl_keluar);
             $convert_masuk = new \DateTime($request->tgl_masuk);
@@ -60,6 +62,7 @@ class riwayatController extends Controller
             $difftanggal = $convert_masuk->diff($convert_keluar);
             $hariRawat = $difftanggal->days + 1;
             $lamaRawat = $difftanggal->days;
+
         }
 
         $date = Carbon::now('Asia/Jakarta')->toDateTimeString();
@@ -88,12 +91,19 @@ class riwayatController extends Controller
 ////        $response["data"] = compact('dataRiwayats');
 //        return response()->json($response, 201);
 
+        //hitung umur berdasarkan hari
+        $tgllahir = pasien::where('id',$request->id_pasien)->first()->tgl_lahir;
+        $cektglmasuk = Carbon::parse($request->tgl_masuk);
+        $ceklahir = Carbon::parse($tgllahir);
+        $difflahir = $cektglmasuk->diffInDays($ceklahir);
+        $umur = $difflahir >= 365 ? round($difflahir/365,0) : round($difflahir/365,8);
         $datanya = [
             "id_pasien" => $request->id_pasien,
             "id_kamar" => $request->id_kamar,
             "id_pembayaran" => $request->id_pembayaran,
             "id_diagnosis" => $request->id_diagnosis,
             "tgl_masuk" => $request->tgl_masuk,
+            "umur" => $umur,
             "pindah" => $request->pindah,
             "pulang_paksa" => $request->pulang_paksa,
             "status_keluar" => $request->status_keluar,
@@ -105,7 +115,7 @@ class riwayatController extends Controller
             $datanya["tgl_keluar"] = $request->tgl_keluar;
         }
         if ($request->status_keluar == "Dirujuk") {
-            $datanya["id_rumah_sakit_rujuks"] = $request->id_rumah_sakit_rujuks;
+            $datanya["id_rumah_sakit_rujuk  s"] = $request->id_rumah_sakit_rujuks;
         }
         if ($request->status_keluar == "Meninggal") {
             if ($lamaJam <= 48) {
@@ -171,42 +181,39 @@ class riwayatController extends Controller
         $lamaRawat = 0;
         $lebih_dari = 0;
         $kurang_dari = 0;
+        $rujuk = null;
+        $lamaJam=0;
         if ($request->tgl_keluar != '') {
             $convert_keluar = new \DateTime($request->tgl_keluar);
             $convert_masuk = new \DateTime($riwayat->tgl_masuk);
             $cekmasuk = Carbon::parse($riwayat->tgl_masuk);
             $cekkeluar = Carbon::parse($request->tgl_keluar);
             $diffhours = $cekkeluar->diffInHours($cekmasuk);
-            if ($request->status_keluar == "Meninggal") {
-                if ($diffhours <= 48) {
-                    $kurang_dari = '1';
-                    $lebih_dari = '0';
-                } elseif ($diffhours > 48) {
-                    $kurang_dari = '0';
-                    $lebih_dari = '1';
-                }
-            }
+            $lamaJam = $diffhours;
             $difftanggal = $convert_masuk->diff($convert_keluar);
             $hariRawat = $difftanggal->days + 1;
             $lamaRawat = $difftanggal->days;
-            if ($request->status_keluar == "Dirujuk") {
-                $rujuk = $request->id_rumah_sakit_rujuks;
-            } else {
-                $rujuk = null;
-            }
         }
 
-        $updates = riwayat::where('id', $id)->update([
+        $datas = [
             'pulang_paksa' => $request->pulang_paksa,
             'status_keluar' => $request->status_keluar,
             'jumlah_hari_perawatan' => $hariRawat,
             'jumlah_lama_perawatan' => $lamaRawat,
             'tgl_keluar' => $request->tgl_keluar,
-            'kurang_48' => $kurang_dari,
-            'lebih_48' => $lebih_dari,
-            'id_rumah_sakit_rujuks' => $rujuk
-        ]);
+        ];
+        if ($request->status_keluar == "Dirujuk") {
+            $datas['id_rumah_sakit_rujuks']  = $request->id_rumah_sakit_rujuks;
+        }
+        if ($request->status_keluar == "Meninggal") {
+            if ($lamaJam <= 48) {
+                $datas["kurang_48"] = '1';
+            } elseif ($lamaJam > 48) {
+                $datas["lebih_48"] = '1';
+            }
+        }
 
+        $updates = riwayat::where('id', $id)->update($datas);
 
         $dataRiwayats = riwayat::with(['pasien', 'diagnosis', 'kamar'])->where('tgl_keluar', null)->get();
         $dataRiwayatKeluar = riwayat::with(['pasien', 'diagnosis', 'kamar'])->where('tgl_keluar', '<>', null)->get();

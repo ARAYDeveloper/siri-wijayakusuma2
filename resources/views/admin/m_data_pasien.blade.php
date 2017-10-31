@@ -35,7 +35,7 @@
                                                 <div class="box-body">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <input type="text" name="id_pasien" id="id_pasien"
+                                                            <input type="hidden" name="id_pasien" id="id_pasien"
                                                                    value="">
                                                             <div class="form-group">
                                                                 <label class="col-sm-3 control-label">Nama</label>
